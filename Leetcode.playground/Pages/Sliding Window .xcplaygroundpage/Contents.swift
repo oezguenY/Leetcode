@@ -133,7 +133,86 @@ func minSubArrayLen(_ target: Int, _ nums: [Int]) -> Int {
         return minLength
     }
 
-minSubArrayLen(6, [-1,3,2,1])
+minSubArrayLen(6, [3,2,1,5,2])
+minSubArrayLen(7, [2,3,1,2,4,3])
 
 
 
+// MARK: - Find the smallest subarray with given sum
+
+func smallestSubarray(array: [Int], target: Int) -> Int? {
+    var minValue = Int.max
+    var currentSum = 0
+    var windowStart = 0
+    
+    for windowEnd in 0..<array.count {
+        currentSum += array[windowEnd]
+        
+        while currentSum >= target {
+            minValue = min(minValue, windowEnd - windowStart + 1)
+            currentSum -= array[windowStart]
+            windowStart += 1
+        }
+    }
+    if minValue == Int.max{
+        return 0
+    }
+    return minValue
+}
+
+smallestSubarray(array: [4,2,2,7,8,1,2,8,10], target: 15)
+
+
+// MARK: - Find the maximum sum subarray of a fixed size K
+
+
+func findMaxSubArray(array: [Int], size: Int) -> Int? {
+    var maxValue = Int.min
+    var currentSum = 0
+    
+    for i in 0..<array.count {
+        currentSum += array[i]
+        
+        if i >= size - 1 {
+            maxValue = max(maxValue, currentSum)
+            currentSum -= array[i - (size - 1)]
+        }
+    }
+    return maxValue
+}
+
+findMaxSubArray(array: [3,5,8,1,5,2,6,9], size: 3)
+
+
+// MARK: - Maximum consecutive ones (if k flip is allowed)
+
+// Given an array which only consists of 0s and 1s, write code to find the maximum number of consecutive 1s in an array if we can flip zeros
+
+func countConsecutiveOnes(array: [Int], k: Int) -> Int {
+    
+    var maxConsecutiveOnes = Int.min
+    var start = 0
+    var zeroCount = 0
+    
+    for end in 0..<array.count { // 0
+        if array[end] == 0 { // skipped
+            zeroCount += 1
+        }
+        
+        while zeroCount > k { // skipped
+            if array[start] == 0 {
+                zeroCount -= 1
+            }
+            start += 1
+        }
+        maxConsecutiveOnes = max(maxConsecutiveOnes, end-start+1) // 1
+    }
+    
+    if maxConsecutiveOnes == Int.min { // skipped
+        return 0
+    }
+    
+    return maxConsecutiveOnes
+}
+
+countConsecutiveOnes(array: [0,0,0,0,0,0], k: 2)
