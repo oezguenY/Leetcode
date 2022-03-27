@@ -1,5 +1,6 @@
 
 import Foundation
+import XCTest
 
 // MARK: - Maximum Subarray
 
@@ -86,52 +87,52 @@ maxSubArray([-2,3,2,-1])
 
 /*
  Given an array of positive integers nums and a positive integer target, return the minimal length of a contiguous subarray [numsl, numsl+1, ..., numsr-1, numsr] of which the sum is greater than or equal to target. If there is no such subarray, return 0 instead.
-
-  
-
+ 
+ 
+ 
  Example 1:
-
+ 
  Input: target = 7, nums = [2,3,1,2,4,3]
  Output: 2
  Explanation: The subarray [4,3] has the minimal length under the problem constraint.
  Example 2:
-
+ 
  Input: target = 4, nums = [1,4,4]
  Output: 1
  Example 3:
-
+ 
  Input: target = 11, nums = [1,1,1,1,1,1,1,1]
  Output: 0
-  
-
+ 
+ 
  Constraints:
-
+ 
  1 <= target <= 109
  1 <= nums.length <= 105
  1 <= nums[i] <= 105
-  
-
+ 
+ 
  Follow up: If you have figured out the O(n) solution, try coding another solution of which the time complexity is O(n log(n)).
  */
 
 // Sliding Window
 
 func minSubArrayLen(_ target: Int, _ nums: [Int]) -> Int {
-        var minLength = Int.max, windowStart = 0, sum = 0
-        for windowEnd in 0..<nums.count{ // 2
-            sum += nums[windowEnd] // 3 // 5 // 6
-            
-            while(sum >= target){
-                minLength = min(minLength, windowEnd - windowStart + 1) // 3
-                sum -= nums[windowStart] // 3
-                windowStart += 1 // 1
-            }
+    var minLength = Int.max, windowStart = 0, sum = 0
+    for windowEnd in 0..<nums.count{ // 2
+        sum += nums[windowEnd] // 3 // 5 // 6
+        
+        while(sum >= target){
+            minLength = min(minLength, windowEnd - windowStart + 1) // 3
+            sum -= nums[windowStart] // 3
+            windowStart += 1 // 1
         }
-        if minLength == Int.max{
-            return 0
-        }
-        return minLength
     }
+    if minLength == Int.max{
+        return 0
+    }
+    return minLength
+}
 
 minSubArrayLen(6, [3,2,1,5,2])
 minSubArrayLen(7, [2,3,1,2,4,3])
@@ -216,3 +217,62 @@ func countConsecutiveOnes(array: [Int], k: Int) -> Int {
 }
 
 countConsecutiveOnes(array: [0,0,0,0,0,0], k: 2)
+
+
+// MARK: -  Longest Substring Without Repeating Characters
+
+/*
+ Given a string s, find the length of the longest substring without repeating characters.
+ 
+ Example 1:
+ 
+ Input: s = "abcabcbb"
+ Output: 3
+ Explanation: The answer is "abc", with the length of 3.
+ Example 2:
+ 
+ Input: s = "bbbbb"
+ Output: 1
+ Explanation: The answer is "b", with the length of 1.
+ Example 3:
+ 
+ Input: s = "pwwkew"
+ Output: 3
+ Explanation: The answer is "wke", with the length of 3.
+ Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+ */
+
+func lengthOfLongestSubstring(_ s: String) -> Int {
+    let str = Array(s), n = str.count
+    var index = [Character: Int](), left = 0, ans = 0
+    for right in 0..<n {
+        left = max(left, index[str[right], default: -1] + 1)
+        index[str[right]] = right
+        ans = max(ans, right - left + 1)
+    }
+    return ans
+}
+
+class Tests: XCTestCase {
+    
+    // The answer is "abc", with the length of 3.
+    func test0() {
+        let value = lengthOfLongestSubstring("abcabcbb")
+        XCTAssertEqual(value, 3)
+    }
+    
+    // The answer is "b", with the length of 1.
+    func test1() {
+        let value = lengthOfLongestSubstring("bbbbb")
+        XCTAssertEqual(value, 1)
+    }
+    
+    // The answer is "wke", with the length of 3.
+    // Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+    func test2() {
+        let value = lengthOfLongestSubstring("pwwkew")
+        XCTAssertEqual(value, 3)
+    }
+}
+
+Tests.defaultTestSuite.run()
