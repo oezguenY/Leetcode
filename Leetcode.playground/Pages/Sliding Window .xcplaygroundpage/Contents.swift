@@ -2,6 +2,11 @@
 import Foundation
 import XCTest
 
+extension StringProtocol {
+    subscript(offset: Int) -> Character {
+        self[index(startIndex, offsetBy: offset)]
+    }
+}
 // MARK: - Maximum Subarray
 
 /*
@@ -253,6 +258,109 @@ func lengthOfLongestSubstring(_ s: String) -> Int {
     return ans
 }
 
+func lengthOfLongestSubstring2(_ s: String) -> Int {
+        guard s.count > 1 else { return s.count }
+        let arr = Array(s) // converting the input string into an array
+        var seen = [Character: Int]()
+        var left = 0
+        var right = 0
+        var longest = 0
+        while right < arr.count { // 0,1,2,3,4
+            let current = arr[right] // A,B,C,A,B
+            // Here we are accessing the values. If the key is in the dict and its equal to or greater than left...
+            if let found = seen[current], found >= left { // skipped
+                // we add one to found and assign it to left
+                left = found + 1 // 1,2
+            }
+            seen[current] = right // [C:2], [A:3], [B:4]
+            longest = max(longest, right - left + 1) // 1, 2, 3, 3, 3
+            right += 1 // 1, 2, 3, 4, 5
+        }
+        return longest
+    }
+
+lengthOfLongestSubstring2("abcab")
+
+// MARK: Longest Repeating Character Replacement - Leetcode 424
+
+
+func characterReplacement(s: String, k: Int) -> Int {
+    let sarray = Array(s)
+    var dict: [Character: Int] = [:]
+    var result = 0
+    var l = 0
+    
+    for r in 0..<sarray.count {
+        let char = sarray[r]
+        if dict[char] != nil {
+            dict[char]! += 1
+        } else {
+            dict[char] = 1
+        }
+        // if we exceed the number of replacements we are allowed to make..
+        if (r - l + 1) - dict.values.max()! > k {
+            let lchar = sarray[l]
+            if dict[lchar] != nil {
+                dict[lchar]! -= 1
+            }
+            l += 1
+        }
+        result = max(result, r - l + 1)
+    }
+    
+    return result
+}
+characterReplacement(s: "ABABBA", k: 2)
+
+
+// MARK: - Max Consecutive Ones - Leetcode 485
+
+func maxConsecutiveOnes(nums: [Int]) -> Int {
+    var currentMax = 0
+    var maxOnes = 0
+    
+    for num in 0..<nums.count {
+        if nums[num] == 1 {
+            currentMax += 1
+            maxOnes = max(maxOnes, currentMax)
+        } else {
+            currentMax = 0
+        }
+    }
+    return maxOnes
+}
+
+maxConsecutiveOnes(nums: [1,1,0,1,1,1])
+
+// MARK: - Max Consecutive Ones iii - Leetcode 1004
+
+func maxConsecutiveOnes3(_ nums: [Int], _ k: Int) -> Int {
+    var k = k
+    var i = 0
+    var j = 0
+    
+    while i < nums.count { // 0, 1, 2, 3, 4, 5
+        if nums[i] == 0 {
+            k -= 1 // 1, 0, -1, -1
+        }
+        if k < 0 {
+            if nums[j] == 0 {
+                k += 1 // 0, 0
+            }
+            // we only move j if k < 0, which means that there are more 0 than we can flip
+            j += 1 // 1, 2
+        }
+        i += 1 // 1, 2, 3, 4, 5
+    }
+    return i-j
+}
+
+maxConsecutiveOnes3([0,0,0,0,1], 2)
+
+
+// MARK: - Find the longest contiguous substring length with k distinct characters
+
+
 class Tests: XCTestCase {
     
     // The answer is "abc", with the length of 3.
@@ -273,6 +381,9 @@ class Tests: XCTestCase {
         let value = lengthOfLongestSubstring("pwwkew")
         XCTAssertEqual(value, 3)
     }
+    
 }
 
 Tests.defaultTestSuite.run()
+
+
