@@ -398,8 +398,40 @@ func checkInclusion(_ s1: String, _ s2: String) -> Bool {
 
 checkInclusion("aba", "kbaaj")
 
+// MARK: - Find Anagrams
 
-// MARK: - Find the longest contiguous substring length with k distinct characters
+func findAnagrams(_ s: String, _ p: String) -> [Int] {
+      
+      var dictP = [Character: Int]()
+      var dictS = [Character: Int]()
+      var result: [Int] = []
+      let s = Array(s)
+      let pCount = p.count // 3
+      
+      for char in p {
+          dictP[char, default: 0] += 1 // [a:1,b:1,c:1]
+      }
+      // s.count = 4
+      for i in 0..<s.count { // 0, 1, 2, 3
+          
+          //Remove first char in the dictionary
+          if i >= pCount {
+              let char = s[i - pCount] // o
+              dictS[char] = dictS[char]! > 1 ? dictS[char]! - 1 : nil // remove o
+          }
+          
+          //Find a window of pCount letters to compare
+          dictS[s[i], default: 0] += 1 // [b:1,c:1,a:1]
+          
+          if dictS == dictP {
+              result.append(i - pCount + 1)
+          }
+      }
+      
+      return result
+  }
+
+findAnagrams("obca", "abc")
 
 
 class Tests: XCTestCase {
