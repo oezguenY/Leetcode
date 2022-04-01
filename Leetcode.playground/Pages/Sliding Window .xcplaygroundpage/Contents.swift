@@ -357,6 +357,47 @@ func maxConsecutiveOnes3(_ nums: [Int], _ k: Int) -> Int {
 
 maxConsecutiveOnes3([0,0,0,0,1], 2)
 
+// MARK: - Permutation in String - Leetcode 567
+
+// Time complexity: O(lengthOf(s2))
+// Space complexity: O(lengthOf(s2))
+func checkInclusion(_ s1: String, _ s2: String) -> Bool {
+    // Initial sanity checks
+    guard !s1.isEmpty, !s2.isEmpty, s1.count <= s2.count else { return false }
+    
+    // Compose a dictuionary with characters form string 1
+    var map1: [Character: Int] = [:]
+    let chars1 = Array(s1)
+    for char in chars1 {
+        map1[char] = map1[char, default: 0] + 1 // ["b": 1, "a": 2]
+    }
+    
+    
+    // Sliding window preparation: dictionary of characters from string 2 from 0 positon to position of string 1 length
+    let chars2 = Array(s2)
+    var map2: [Character: Int] = [:]
+    for i in 0..<chars1.count {
+        map2[chars2[i]] = map2[chars2[i], default: 0] + 1 // [k:1,b:1,a:1]
+    }
+    
+    
+    // Then go through string 2 comparing window to map1 and modifying it if it doesn't match
+    // Modification throws away left character and adds new from the right
+    for i in chars1.count..<chars2.count {
+        guard map1 != map2 else { return true }
+        // getting the leftmost character frequency of map2 (which is 1 for k the first iteration)
+        if let value = map2[chars2[i - chars1.count]] {
+            map2[chars2[i - chars1.count]] = value > 1 ? value - 1 : nil // [b:1,a:1]
+        }
+        map2[chars2[i]] = map2[chars2[i], default: 0] + 1 // [b:1,a:2]
+    }
+    
+    // If we went through string 2 and map2 has never been equal to map1 there is no permutation of string 1 in string 2
+    return map1 == map2
+}
+
+checkInclusion("aba", "kbaaj")
+
 
 // MARK: - Find the longest contiguous substring length with k distinct characters
 
