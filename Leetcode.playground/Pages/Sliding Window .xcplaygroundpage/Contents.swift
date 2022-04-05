@@ -627,15 +627,15 @@ func totalFruit2(_ nums: [Int]) -> Int {
     
     for j in 0..<nums.count {
         if let duplicate = dict[nums[j]] {
-            dict[nums[j]] = duplicate + 1
+           dict[nums[j]] = duplicate + 1
         } else {
             dict[nums[j]] = 1
         }
         while dict.count >= 3 {
             if let duplicate = dict[nums[i]] {
-                dict[nums[j]] = duplicate - 1
+                dict[nums[i]] = duplicate - 1
             }
-            if dict[nums[i]] == 1 {
+            if dict[nums[i]] == 0 {
                 dict[nums[i]] = nil
             }
             i += 1
