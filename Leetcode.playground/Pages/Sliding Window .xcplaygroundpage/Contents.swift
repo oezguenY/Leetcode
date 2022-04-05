@@ -78,8 +78,8 @@ func maxSubArrayTry(array: [Int]) -> Int {
     var globalMax = array[0]
     
     for i in 1..<array.count {
-        currentMax = max(array[i], currentMax + array[i])
-        globalMax = max(currentMax, globalMax)
+        currentMax = max(array[i], currentMax + array[i]) // 3, 5, 4
+        globalMax = max(currentMax, globalMax) // 3, 5, 5
     }
     return globalMax
 }
@@ -124,10 +124,10 @@ maxSubArray([-2,3,2,-1])
 
 func minSubArrayLen(_ target: Int, _ nums: [Int]) -> Int {
     var minLength = Int.max, windowStart = 0, sum = 0
-    for windowEnd in 0..<nums.count{ // 2
-        sum += nums[windowEnd] // 3 // 5 // 6
+    for windowEnd in 0..<nums.count{ // 0, 1, 2
+        sum += nums[windowEnd] // 3, 5, 6
         
-        while(sum >= target){
+        while(sum >= target) {
             minLength = min(minLength, windowEnd - windowStart + 1) // 3
             sum -= nums[windowStart] // 3
             windowStart += 1 // 1
@@ -141,6 +141,26 @@ func minSubArrayLen(_ target: Int, _ nums: [Int]) -> Int {
 
 minSubArrayLen(6, [3,2,1,5,2])
 minSubArrayLen(7, [2,3,1,2,4,3])
+
+func minSubarrayLen2(nums: [Int], target: Int) -> Int {
+    
+    var currentSum = 0, minLength = Int.max, l = 0
+    
+    for r in 0..<nums.count {
+        currentSum += nums[r]
+        
+        while currentSum >= target {
+            minLength = min(minLength, r - l + 1)
+            currentSum -= nums[l]
+            l += 1
+        }
+    }
+    if minLength == Int.max {
+        return 0
+    }
+    return minLength
+}
+
 
 
 
@@ -433,8 +453,166 @@ func findAnagrams(_ s: String, _ p: String) -> [Int] {
 
 findAnagrams("obca", "abc")
 
+// MARK: - Minimum Window Substring (Hard) - Leetcode 76
+
+func minWindow(_ s: String, _ t: String) -> String {
+    
+    let tArray = Array(t)
+    let sArray = Array(s)
+    var sHash = [Character:Int]()
+    var thash = [Character:Int]()
+    var i = 0
+    var j = 0
+    var found = 0
+    var result = ""
+    
+    for char in tArray {
+        thash[char, default: 0] += 1 // [A:2]
+    }
+    
+    while j < sArray.count { // 0, 1, 2, 3, 4, 5 // 0
+        sHash[sArray[j],default: 0] += 1 // [A:2,B:2:C:1] // [A:1]
+        if let count = thash[sArray[j]], count > 1 {
+            found += 1 // 1, 2, 3
+            if found == tArray.count {
+                let start = s.index(s.startIndex, offsetBy: i) // 0
+                let end = s.index(s.endIndex, offsetBy: -1 * (s.count - j)) // -1
+                let range = start...end
+                let currentResult = s[range]
+                if result.isEmpty {
+                    result = String(currentResult) // "AAABBC"
+                } else {
+                    if currentResult.count < result.count {
+                        result = String(currentResult)
+                    }
+                }
+                while found == thash.count {
+                    i += 1 // 1, 2, 3
+                    let char2 = sArray[i - 1] // A, A, A
+                    sHash[char2,default: 0] -= 1 // [A:0,B:2:C:1]
+                    if let count = thash[char2], count != sHash[char2] { // 1 != 2
+                        found -= 1 // 2
+                        let start = s.index(s.startIndex, offsetBy: i - 1) // 2
+                        let end = s.index(s.endIndex, offsetBy: -1 * (s.count - j)) // -1
+                        let range = start...end
+                        let currentResult = s[range] // "ABBC"
+                        if result.isEmpty {
+                            result = String(currentResult)
+                        } else {
+                            if currentResult.count < result.count {
+                                result = String(currentResult)
+                            }
+                        }
+                    }
+                }
+                }
+            }
+            j += 1 // 1, 2, 3, 4, 5
+        }
+        return result
+    }
+
+minWindow("aaa", "aa")
+minWindow("aaabbcc", "abc")
+minWindow("abbbbba", "bba")
+minWindow("abc", "cba")
+minWindow("ADOBECODEBANC", "ABC")
+
+
+
+func minWindow2(_ s: String, _ t: String) -> String {
+        
+        guard s.count > 0, t.count > 0 else { return "" }
+        
+        var tDict: [Character: Int] = [:]
+        for c in t {
+            tDict[c, default: 0] += 1 // [A:2]
+        }
+        
+        var left = 0, right = 0, formed = 0
+        var savedLeft = 0
+        var savedRight = 0
+        var savedLength = -1
+        
+        var windowDict: [Character: Int] = [:]
+        let s = Array(s) // ["A","A","A"]
+        
+        while right < s.count { // 0...3, 0, 1
+            let c = s[right] // A, A
+            windowDict[c, default: 0] += 1 // [A:2]
+            
+            if let count = tDict[c], count == windowDict[c] { // skipped,
+                formed += 1 // 1
+            }
+            
+            while left <= right, formed == tDict.count { // entered
+                let c = s[left] // A
+                if savedLength == -1 || right - left + 1 < savedLength { 
+                    savedLength = right - left + 1
+                    savedLeft = left
+                    savedRight = right
+                }
+                
+                if let count = windowDict[c], count > 0 {
+                    windowDict[c] = count - 1
+                    
+                    if let required = tDict[c], count - 1 < required {
+                        formed -= 1
+                    }
+                }
+                left += 1
+            } 
+            right += 1 // 1
+        }
+        return savedLength == -1 ? "" : String(s[savedLeft...savedRight])
+    }
+
+
+// MARK: - Maximum Subarray - Leetcode 53
+
+func maxSubArray2(_ nums: [Int]) -> Int {
+   // do we continue the sequence or do we break it and start over?
+    var sum = 0
+    var answer = Int.min
+    
+    for num in nums {
+        sum = max(num, num + sum) // -2, 1, -2, 4
+        answer = max(sum, answer)
+    }
+    return answer
+   }
+
+func maxSubArray3(_ nums: [Int]) -> Int {
+    var sum = 0
+    var answer = Int.min
+    
+    for num in nums {
+        sum = max(num, num + sum)// for every iteration, we either expand our sequence or we start over
+        answer = max(answer, sum)
+    }
+    return answer
+}
+
+
+
+// MARK: - Minimum Size Subarray Sum - Leetcode 209
 
 class Tests: XCTestCase {
+    
+    func test53_0() {
+        let value = maxSubArray3([-2,1,-3,4,-1,2,1,-5,4])
+       XCTAssertEqual(value, 6)
+    }
+    
+    func test53_1() {
+        let value = maxSubArray3([1])
+        XCTAssertEqual(value, 1)
+    }
+    
+    func test53_2() {
+        let value = maxSubArray3([5,4,-1,7,8])
+        XCTAssertEqual(value, 23)
+    }
     
     // The answer is "abc", with the length of 3.
     func test0() {
@@ -453,6 +631,21 @@ class Tests: XCTestCase {
     func test2() {
         let value = lengthOfLongestSubstring("pwwkew")
         XCTAssertEqual(value, 3)
+    }
+    
+    func test209_0() {
+        let value = minSubarrayLen2(nums: [2,3,1,2,4,3], target: 7)
+        XCTAssertEqual(value, 2)
+    }
+    
+    func test209_1() {
+        let value = minSubarrayLen2(nums: [1,4,4], target: 4)
+        XCTAssertEqual(value, 1)
+    }
+    
+    func test209_2() {
+        let value = minSubarrayLen2(nums: [1,1,1,1,1,1,1,1], target: 11)
+        XCTAssertEqual(value, 0)
     }
     
 }
