@@ -593,11 +593,78 @@ func maxSubArray3(_ nums: [Int]) -> Int {
     return answer
 }
 
+// MARK: - Fruit into baskets - Leetcode 904
 
+func totalFruit(_ tree: [Int]) -> Int {
+        var i = 0
+        var dict: [Int:Int] = [:]
+        var global = 0
+        
+        for j in 0..<tree.count { // 0, 1, 2, 3, 4
+            if let duplicate = dict[tree[j]] { // nil, nil, nil
+                dict[tree[j]] = duplicate + 1 // [2:3,3:1]
+            } else {
+                dict[tree[j]] = 1 // [1:1,2:1,3:1]
+            }
+            while dict.count >= 3 {
+                if let duplicate = dict[tree[i]] { // 1
+                    dict[tree[i]] = duplicate - 1 // 0
+                }
+                if dict[tree[i]] == 0 {
+                    dict[tree[i]] = nil // [2:1,3:1]
+                }
+                i += 1 // 1
+            }
+            global = max(global, j - i + 1) // 1, 2, 2, 3, 4
+        }
+        return global
+    }
+
+func totalFruit2(_ nums: [Int]) -> Int {
+    var i = 0
+    var dict = [Int:Int]()
+    var global = Int.min
+    
+    for j in 0..<nums.count {
+        if let duplicate = dict[nums[j]] {
+            dict[nums[j]] = duplicate + 1
+        } else {
+            dict[nums[j]] = 1
+        }
+        while dict.count >= 3 {
+            if let duplicate = dict[nums[i]] {
+                dict[nums[j]] = duplicate - 1
+            }
+            if dict[nums[i]] == 1 {
+                dict[nums[i]] = nil
+            }
+            i += 1
+        }
+        global = max(global, j - i + 1)
+    }
+    return global
+}
+
+// 1,2,3,2,2
 
 // MARK: - Minimum Size Subarray Sum - Leetcode 209
 
 class Tests: XCTestCase {
+    
+    func test904_0() {
+        let value = totalFruit2([1,2,1])
+        XCTAssertEqual(value, 3)
+    }
+    
+    func test904_1() {
+        let value = totalFruit2([0,1,2,2])
+        XCTAssertEqual(value, 3)
+    }
+    
+    func test904_2() {
+        let value = totalFruit2([1,2,3,2,2])
+        XCTAssertEqual(value, 4)
+    }
     
     func test53_0() {
         let value = maxSubArray3([-2,1,-3,4,-1,2,1,-5,4])
