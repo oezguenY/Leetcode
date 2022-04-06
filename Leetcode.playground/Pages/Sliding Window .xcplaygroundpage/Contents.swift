@@ -626,14 +626,14 @@ func totalFruit2(_ nums: [Int]) -> Int {
     var global = Int.min
     
     for j in 0..<nums.count {
-        if let duplicate = dict[nums[j]] {
-           dict[nums[j]] = duplicate + 1
+        if let _ = dict[nums[j]] {
+           dict[nums[j],default: 0] += 1
         } else {
             dict[nums[j]] = 1
         }
         while dict.count >= 3 {
-            if let duplicate = dict[nums[i]] {
-                dict[nums[i]] = duplicate - 1
+            if let _ = dict[nums[i]] {
+                dict[nums[i],default: 0] -= 1
             }
             if dict[nums[i]] == 0 {
                 dict[nums[i]] = nil
@@ -645,11 +645,76 @@ func totalFruit2(_ nums: [Int]) -> Int {
     return global
 }
 
-// 1,2,3,2,2
+func lengthOfLongestSubstring3(_ s: String) -> Int {
+        guard s.count > 0 else { return 0 }
+        
+        let sArr = Array(s) // pwwkew
+        
+        var lastIndexes: [Character: Int] = [:]
+        
+        var result = Int.min
+        
+        var windowStart = 0
+        for windowEnd in 0..<sArr.count { // 0, 1, 2, 3, 4, 5
+            let rightCharacter = sArr[windowEnd] // p, w, w, k, e, w
+
+            // if we have seen a character before, remove characters up until seenIndex
+            if let seenIndex = lastIndexes[rightCharacter] { // 1
+                while windowStart <= seenIndex {
+                    let leftCharacter = sArr[windowStart] // p
+                    lastIndexes[leftCharacter] = nil // remove p
+                    windowStart += 1 // 1
+                }
+            }
+            
+            // calculate current string length and compare it with max length
+            lastIndexes[rightCharacter] = windowEnd // [k:3,e:4,w:5]
+            result = max(result, windowEnd - windowStart + 1) // 1, 2, 1, 2, 3, 3
+        }
+        
+        return result
+    }
+
+// MARK: - Longest Substring Without Repeating Characters - Leetcode 3
+
+func lengthOfLongestSubstring4(_ s: String) -> Int {
+    guard s.count >= 1 else { return 0 }
+    
+    var i = 0, longest = Int.min, arr = Array(s), dict = [Character:Int]()
+    
+    for j in 0..<arr.count { // 0, 1, 2, 3, 4, 5
+        if let foundAtIndex = dict[arr[j]] { // 1, 2
+            while i <= foundAtIndex {
+                dict[arr[i]] = nil // [k:3,e:4]
+                i += 1  // 1, 2, 3
+            }
+        }
+        dict[arr[j]] = j // [k:3,e:4,w:5]
+        longest = max(longest, j - i + 1) // 1, 2, 1, 2, 3, 3
+    }
+    return longest
+}
+
+// "pwwkew"
 
 // MARK: - Minimum Size Subarray Sum - Leetcode 209
 
 class Tests: XCTestCase {
+    
+    func test3_0() {
+        let value = lengthOfLongestSubstring4("abcabcbb")
+        XCTAssertEqual(value, 3)
+    }
+    
+    func test3_1() {
+        let value = lengthOfLongestSubstring4("bbbbb")
+        XCTAssertEqual(value, 1)
+    }
+    
+    func test3_2() {
+        let value = lengthOfLongestSubstring4("pwwkew")
+        XCTAssertEqual(value, 3)
+    }
     
     func test904_0() {
         let value = totalFruit2([1,2,1])
