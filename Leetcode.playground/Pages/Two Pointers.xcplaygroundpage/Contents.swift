@@ -34,7 +34,38 @@ func twoSum2II(_ nums: [Int], _ target: Int) -> [Int] {
     return []
 }
 
+// MARK: - Two Sum 1
+
+func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+        var dict = [Int: Int]()
+        
+        for (i, num) in nums.enumerated() { // 0,2-1,7
+            if let index = dict[target-num] { // 0
+                if i != index {
+                    return [index, i] 
+                }
+            }
+            dict[num] = i // [2:0]
+        }
+        return[0]
+    }
+
 class Tests: XCTestCase {
+    
+    func test1() {
+        let value = twoSum([2,7,11,15], 9)
+        XCTAssertEqual(value, [0,1])
+    }
+    
+    func test1_2() {
+        let value = twoSum([3,2,4], 6)
+        XCTAssertEqual(value, [0,1])
+    }
+    
+    func test1_3() {
+        let value = twoSum([3,3], 6)
+        XCTAssertEqual(value, [0,1])
+    }
     
     func test167() {
         let value = twoSum2II([2,7,11,15], 9)
