@@ -64,27 +64,60 @@ func twoSum2(_ nums: [Int], _ target: Int) -> [Int] {
 func removeDuplicates(nums: inout [Int]) -> Int {
         guard nums.count != 0 && nums.count != 1 else { return nums.count }
         var i = 0
-        for j in 0..<nums.count {
-          if nums[i] != nums[j] {
-            i += 1
-            nums[i] = nums[j]
+        for j in 0..<nums.count { // 0, 1, 2, 3, 4, 5, 6, 7
+          if nums[i] != nums[j] { // 0 != 1, 2 != 1, 3 !=
+            i += 1 // 1, 2, 3
+            nums[i] = nums[j] // [0,1,2,3]
           }
         }
         return i+1
     }
 
+func removeDuplicates2(nums: inout [Int]) -> Int {
+    var l = 0
+    
+    for r in 0..<nums.count {
+        if nums[r] != nums[l] {
+            l += 1
+            nums[l] = nums[r]
+        }
+    }
+    return l + 1
+}
+
+// MARK: - Squares of a sorted array 977
+
+func sortedSquares(_ nums: [Int]) -> [Int] {
+    
+    var squared = [Int]()
+    
+    for num in 0..<nums.count {
+        squared.append(nums[num] * nums[num])
+    }
+    
+    squared.sort()
+    
+    return squared
+    }
 
 class Tests: XCTestCase {
     
+    func test977() {
+        let intArray = [-4,-1,0,3,10]
+        let value = sortedSquares(intArray)
+        XCTAssertEqual(value, [0,1,9,16,100])
+    }
+    
+    
     func test26() {
         var intArray = [1,1,2]
-        let value = removeDuplicates(nums: &intArray)
+        let value = removeDuplicates2(nums: &intArray)
         XCTAssertEqual(value, 2)
     }
     
     func test26_1() {
         var intArray = [0,0,1,1,1,2,2,3,3,4]
-        let value = removeDuplicates(nums: &intArray)
+        let value = removeDuplicates2(nums: &intArray)
         XCTAssertEqual(value, 5)
     }
 
