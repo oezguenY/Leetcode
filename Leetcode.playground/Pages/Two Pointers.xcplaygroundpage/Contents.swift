@@ -59,6 +59,19 @@ func twoSum2(_ nums: [Int], _ target: Int) -> [Int] {
         return []
     }
 
+func twoSum3(_ nums: [Int], _ target: Int) -> [Int] {
+    var dict = [Int:Int]()
+    
+    for (i,num) in nums.enumerated() {
+        if let index = dict[target - num] { // 0
+            return [i, index].sorted()
+        }
+        dict[num] = i // [2:0,]
+    }
+    return []
+}
+
+
 // MARK: - Remove Duplicates from Sorted Array 26
 
 func removeDuplicates(nums: inout [Int]) -> Int {
@@ -100,7 +113,56 @@ func sortedSquares(_ nums: [Int]) -> [Int] {
     return squared
     }
 
+// MARK: - 3Sum 15
+
+func threeSum(_ nums: [Int]) -> [[Int]] {
+        // [-1,0,1,2,-1,-4]
+        var result: [[Int]] = []
+        let nums = nums.sorted() // [-4,-1,-1,0,1,2]
+        let len = nums.count //6
+        
+        guard len >= 3 else { return result }
+        
+        for i in 0..<len { // 0, 1
+            if i > 0 && nums[i] == nums[i-1] { continue }
+            
+            let num = 0 - nums[i] // 4, 1
+            var a = i + 1 // 1, 2
+            var b = len - 1 // 5, 5
+            
+            while a < b { // 2<5
+                let numA = nums[a] // -1
+                let numB = nums[b] // 2
+                let sum = numA + numB // 1
+                if sum == num { // true
+                    result.append([nums[i], numA, numB]) // [-1,-1,2]
+                    a += 1 // 3
+                    while a < b && nums[a] == nums[a-1] { a += 1 }
+                } else {
+                    sum > num ? b -= 1 : (a += 1) // 2, 3, 4, 5
+                }
+            }
+        }
+        return result
+    }
+
+
 class Tests: XCTestCase {
+    
+    func test15() {
+        let value = threeSum([-1,0,1,2,-1,-4])
+        XCTAssertEqual([[-1,-1,2],[-1,0,1]], value)
+    }
+    
+    func test15_2() {
+        let value = threeSum([])
+        XCTAssertEqual([], value)
+    }
+    
+    func test15_3() {
+        let value = threeSum([0])
+        XCTAssertEqual(value, [])
+    }
     
     func test977() {
         let intArray = [-4,-1,0,3,10]
@@ -122,17 +184,17 @@ class Tests: XCTestCase {
     }
 
     func test1() {
-        let value = twoSum([2,7,11,15], 9)
+        let value = twoSum3([2,7,11,15], 9)
         XCTAssertEqual(value, [0,1])
     }
     
     func test1_2() {
-        let value = twoSum([3,2,4], 6)
+        let value = twoSum3([3,2,4], 6)
         XCTAssertEqual(value, [1,2])
     }
     
     func test1_3() {
-        let value = twoSum([3,3], 6)
+        let value = twoSum3([3,3], 6)
         XCTAssertEqual(value, [0,1])
     }
     
