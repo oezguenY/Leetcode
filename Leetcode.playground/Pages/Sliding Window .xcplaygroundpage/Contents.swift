@@ -697,9 +697,37 @@ func lengthOfLongestSubstring4(_ s: String) -> Int {
 
 // "pwwkew"
 
-// MARK: - Minimum Size Subarray Sum - Leetcode 209
+// MARK: - Subarray Product Less Than K 713
+
+func numSubarrayProductLessThanK(_ nums: [Int], _ k: Int) -> Int {
+    var result = 0
+    var curr = 1
+    var slow = 0
+
+    for fast in 0 ..< nums.count { // 0, 1
+        curr *= nums[fast] // 10, 50
+        while curr >= k && slow <= fast {
+            curr /= nums[slow] //
+            slow += 1 //
+        }
+        result += (fast - slow + 1) // 1, 3
+    }
+
+    return result
+}
+
 
 class Tests: XCTestCase {
+    
+    func test713() {
+        let value = numSubarrayProductLessThanK([10,5,2,6], 100)
+        XCTAssertEqual(8, value)
+    }
+    
+    func test713_1() {
+        let value = numSubarrayProductLessThanK([1,2,3], 0)
+        XCTAssertEqual(0, value)
+    }
     
     func test3_0() {
         let value = lengthOfLongestSubstring4("abcabcbb")
