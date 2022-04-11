@@ -146,9 +146,48 @@ func threeSum(_ nums: [Int]) -> [[Int]] {
         return result
     }
 
+// MARK: - 3SumClosest 16
+
+func threeSumClosest(_ nums: [Int], _ target: Int) -> Int {
+        
+        let sorted = nums.sorted()
+        let length = sorted.count
+        
+        var diff: Int = .max
+        var result = 0
+        
+        for i in 0..<length - 2 {
+            var n = i + 1, q = length - 1
+            while n < q {
+                let sum = sorted[i] + sorted[n] + sorted[q]
+                
+                sum > target ? (q -= 1) : (n += 1)
+                
+                let value =  abs(sum - target)
+                
+                if value < diff {
+                    diff = value
+                    result = sum
+                }
+            }
+        }
+        return result
+    }
+
+
 
 class Tests: XCTestCase {
     
+    func test16() {
+        let value = threeSumClosest([-1,2,1,-4], 1)
+        XCTAssertEqual(2, value)
+    }
+    
+    func test16_2() {
+        let value = threeSumClosest([0,0,0], 1)
+        XCTAssertEqual(0, value)
+    }
+
     func test15() {
         let value = threeSum([-1,0,1,2,-1,-4])
         XCTAssertEqual([[-1,-1,2],[-1,0,1]], value)
