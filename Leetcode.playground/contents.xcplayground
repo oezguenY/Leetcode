@@ -3,5 +3,6 @@
     <pages>
         <page name='Sliding Window '/>
         <page name='Two Pointers'/>
+        <page name='Fast &amp; Slow Pointers'/>
     </pages>
 </playground>

@@ -716,6 +716,34 @@ func numSubarrayProductLessThanK(_ nums: [Int], _ k: Int) -> Int {
     return result
 }
 
+// MARK: - Sort Colors 75
+
+// [2,0,2,1,1,0]
+
+// - Complexity:
+  //   - time: O(n), where n is the length of the nums.
+  //   - space: O(1), only constant space is used.
+
+  func sortColors(_ nums: inout [Int]) {
+      var zeroIndex = 0
+      var twoIndex = nums.count - 1
+      var i = 0
+
+      while i <= twoIndex {
+          if nums[i] == 0, i > zeroIndex {
+              nums.swapAt(i, zeroIndex)
+              zeroIndex += 1
+
+          } else if nums[i] == 2, i < twoIndex {
+              nums.swapAt(i, twoIndex)
+              twoIndex -= 1
+
+          } else {
+              i += 1
+          }
+      }
+  }
+
 
 class Tests: XCTestCase {
     
@@ -724,7 +752,7 @@ class Tests: XCTestCase {
         XCTAssertEqual(8, value)
     }
     
-    func test713_1() {
+    func test713_2() {
         let value = numSubarrayProductLessThanK([1,2,3], 0)
         XCTAssertEqual(0, value)
     }
