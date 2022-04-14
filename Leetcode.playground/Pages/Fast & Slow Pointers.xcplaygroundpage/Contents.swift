@@ -50,6 +50,19 @@ class ListNode {
         
         return slow
     }
+    
+    // MARK: - Middle of the Linked List 876
+    
+    func middleNode(_ head: ListNode?) -> ListNode? {
+        var (fast,slow) = (head, head)
+        
+        while(fast?.next != nil) {
+            fast = fast?.next?.next
+            slow = slow?.next
+        }
+        
+        return slow
+    }
 }
 
 // MARK: - Happy Number 202
