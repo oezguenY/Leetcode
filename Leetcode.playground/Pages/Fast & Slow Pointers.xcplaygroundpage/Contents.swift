@@ -65,20 +65,20 @@ class ListNode {
     }
     
     // MARK: - Palindrome Linked List
-    // 
+    // [1,2,2,1]
     func isPalindrome(_ head: ListNode?) -> Bool {
-            var fast: ListNode? = head
-            var slow: ListNode? = head
+            var fast: ListNode? = head // 1
+            var slow: ListNode? = head // 1
             
             while fast != nil && fast?.next != nil {
-                fast = fast?.next?.next
-                slow = slow?.next
+                fast = fast?.next?.next // nil
+                slow = slow?.next // 2
             }
             if fast != nil {
                 slow = slow?.next
             }
-            slow = reverse(slow)
-            fast = head
+            slow = reverse(slow) // 1
+            fast = head // nil
             while slow != nil {
                 if fast?.val != slow?.val {
                     return false
@@ -89,16 +89,16 @@ class ListNode {
             
             return true
         }
-        
+    // [1,2,2,1]
         private func reverse(_ head: ListNode?) -> ListNode? {
-            var head = head
+            var head = head // 2
             var pre: ListNode? = nil
         
             while head != nil {
-                let next = head?.next
-                head?.next = pre
-                pre = head
-                head = next
+                let next = head?.next // 1, nil
+                head?.next = pre // 2 -> nil, 1 -> 2
+                pre = head // 2, 1
+                head = next // 1, nil
             }
             
             return pre
