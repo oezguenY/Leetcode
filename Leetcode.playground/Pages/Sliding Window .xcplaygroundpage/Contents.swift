@@ -279,25 +279,25 @@ func lengthOfLongestSubstring(_ s: String) -> Int {
 }
 
 func lengthOfLongestSubstring2(_ s: String) -> Int {
-        guard s.count > 1 else { return s.count }
-        let arr = Array(s) // converting the input string into an array
-        var seen = [Character: Int]()
-        var left = 0
-        var right = 0
-        var longest = 0
-        while right < arr.count { // 0,1,2,3,4
-            let current = arr[right] // A,B,C,A,B
-            // Here we are accessing the values. If the key is in the dict and its equal to or greater than left...
-            if let found = seen[current], found >= left { // skipped
-                // we add one to found and assign it to left
-                left = found + 1 // 1,2
-            }
-            seen[current] = right // [C:2], [A:3], [B:4]
-            longest = max(longest, right - left + 1) // 1, 2, 3, 3, 3
-            right += 1 // 1, 2, 3, 4, 5
+    guard s.count > 1 else { return s.count }
+    let arr = Array(s) // converting the input string into an array
+    var seen = [Character: Int]()
+    var left = 0
+    var right = 0
+    var longest = 0
+    while right < arr.count { // 0,1,2,3,4
+        let current = arr[right] // A,B,C,A,B
+        // Here we are accessing the values. If the key is in the dict and its equal to or greater than left...
+        if let found = seen[current], found >= left { // skipped
+            // we add one to found and assign it to left
+            left = found + 1 // 1,2
         }
-        return longest
+        seen[current] = right // [C:2], [A:3], [B:4]
+        longest = max(longest, right - left + 1) // 1, 2, 3, 3, 3
+        right += 1 // 1, 2, 3, 4, 5
     }
+    return longest
+}
 
 lengthOfLongestSubstring2("abcab")
 
@@ -421,35 +421,35 @@ checkInclusion("aba", "kbaaj")
 // MARK: - Find Anagrams
 
 func findAnagrams(_ s: String, _ p: String) -> [Int] {
-      
-      var dictP = [Character: Int]()
-      var dictS = [Character: Int]()
-      var result: [Int] = []
-      let s = Array(s)
-      let pCount = p.count // 3
-      
-      for char in p {
-          dictP[char, default: 0] += 1 // [a:1,b:1,c:1]
-      }
-      // s.count = 4
-      for i in 0..<s.count { // 0, 1, 2, 3
-          
-          //Remove first char in the dictionary
-          if i >= pCount {
-              let char = s[i - pCount] // o
-              dictS[char] = dictS[char]! > 1 ? dictS[char]! - 1 : nil // remove o
-          }
-          
-          //Find a window of pCount letters to compare
-          dictS[s[i], default: 0] += 1 // [b:1,c:1,a:1]
-          
-          if dictS == dictP {
-              result.append(i - pCount + 1)
-          }
-      }
-      
-      return result
-  }
+    
+    var dictP = [Character: Int]()
+    var dictS = [Character: Int]()
+    var result: [Int] = []
+    let s = Array(s)
+    let pCount = p.count // 3
+    
+    for char in p {
+        dictP[char, default: 0] += 1 // [a:1,b:1,c:1]
+    }
+    // s.count = 4
+    for i in 0..<s.count { // 0, 1, 2, 3
+        
+        //Remove first char in the dictionary
+        if i >= pCount {
+            let char = s[i - pCount] // o
+            dictS[char] = dictS[char]! > 1 ? dictS[char]! - 1 : nil // remove o
+        }
+        
+        //Find a window of pCount letters to compare
+        dictS[s[i], default: 0] += 1 // [b:1,c:1,a:1]
+        
+        if dictS == dictP {
+            result.append(i - pCount + 1)
+        }
+    }
+    
+    return result
+}
 
 findAnagrams("obca", "abc")
 
@@ -505,12 +505,12 @@ func minWindow(_ s: String, _ t: String) -> String {
                         }
                     }
                 }
-                }
             }
-            j += 1 // 1, 2, 3, 4, 5
         }
-        return result
+        j += 1 // 1, 2, 3, 4, 5
     }
+    return result
+}
 
 minWindow("aaa", "aa")
 minWindow("aaabbcc", "abc")
@@ -521,57 +521,57 @@ minWindow("ADOBECODEBANC", "ABC")
 
 
 func minWindow2(_ s: String, _ t: String) -> String {
+    
+    guard s.count > 0, t.count > 0 else { return "" }
+    
+    var tDict: [Character: Int] = [:]
+    for c in t {
+        tDict[c, default: 0] += 1 // [A:2]
+    }
+    
+    var left = 0, right = 0, formed = 0
+    var savedLeft = 0
+    var savedRight = 0
+    var savedLength = -1
+    
+    var windowDict: [Character: Int] = [:]
+    let s = Array(s) // ["A","A","A"]
+    
+    while right < s.count { // 0...3, 0, 1
+        let c = s[right] // A, A
+        windowDict[c, default: 0] += 1 // [A:2]
         
-        guard s.count > 0, t.count > 0 else { return "" }
-        
-        var tDict: [Character: Int] = [:]
-        for c in t {
-            tDict[c, default: 0] += 1 // [A:2]
+        if let count = tDict[c], count == windowDict[c] { // skipped,
+            formed += 1 // 1
         }
         
-        var left = 0, right = 0, formed = 0
-        var savedLeft = 0
-        var savedRight = 0
-        var savedLength = -1
-        
-        var windowDict: [Character: Int] = [:]
-        let s = Array(s) // ["A","A","A"]
-        
-        while right < s.count { // 0...3, 0, 1
-            let c = s[right] // A, A
-            windowDict[c, default: 0] += 1 // [A:2]
-            
-            if let count = tDict[c], count == windowDict[c] { // skipped,
-                formed += 1 // 1
+        while left <= right, formed == tDict.count { // entered
+            let c = s[left] // A
+            if savedLength == -1 || right - left + 1 < savedLength {
+                savedLength = right - left + 1
+                savedLeft = left
+                savedRight = right
             }
             
-            while left <= right, formed == tDict.count { // entered
-                let c = s[left] // A
-                if savedLength == -1 || right - left + 1 < savedLength { 
-                    savedLength = right - left + 1
-                    savedLeft = left
-                    savedRight = right
-                }
+            if let count = windowDict[c], count > 0 {
+                windowDict[c] = count - 1
                 
-                if let count = windowDict[c], count > 0 {
-                    windowDict[c] = count - 1
-                    
-                    if let required = tDict[c], count - 1 < required {
-                        formed -= 1
-                    }
+                if let required = tDict[c], count - 1 < required {
+                    formed -= 1
                 }
-                left += 1
-            } 
-            right += 1 // 1
+            }
+            left += 1
         }
-        return savedLength == -1 ? "" : String(s[savedLeft...savedRight])
+        right += 1 // 1
     }
+    return savedLength == -1 ? "" : String(s[savedLeft...savedRight])
+}
 
 
 // MARK: - Maximum Subarray - Leetcode 53
 
 func maxSubArray2(_ nums: [Int]) -> Int {
-   // do we continue the sequence or do we break it and start over?
+    // do we continue the sequence or do we break it and start over?
     var sum = 0
     var answer = Int.min
     
@@ -580,7 +580,7 @@ func maxSubArray2(_ nums: [Int]) -> Int {
         answer = max(sum, answer)
     }
     return answer
-   }
+}
 
 func maxSubArray3(_ nums: [Int]) -> Int {
     var sum = 0
@@ -596,29 +596,29 @@ func maxSubArray3(_ nums: [Int]) -> Int {
 // MARK: - Fruit into baskets - Leetcode 904
 
 func totalFruit(_ tree: [Int]) -> Int {
-        var i = 0
-        var dict: [Int:Int] = [:]
-        var global = 0
-        
-        for j in 0..<tree.count { // 0, 1, 2, 3, 4
-            if let duplicate = dict[tree[j]] { // nil, nil, nil
-                dict[tree[j]] = duplicate + 1 // [2:3,3:1]
-            } else {
-                dict[tree[j]] = 1 // [1:1,2:1,3:1]
-            }
-            while dict.count >= 3 {
-                if let duplicate = dict[tree[i]] { // 1
-                    dict[tree[i]] = duplicate - 1 // 0
-                }
-                if dict[tree[i]] == 0 {
-                    dict[tree[i]] = nil // [2:1,3:1]
-                }
-                i += 1 // 1
-            }
-            global = max(global, j - i + 1) // 1, 2, 2, 3, 4
+    var i = 0
+    var dict: [Int:Int] = [:]
+    var global = 0
+    
+    for j in 0..<tree.count { // 0, 1, 2, 3, 4
+        if let duplicate = dict[tree[j]] { // nil, nil, nil
+            dict[tree[j]] = duplicate + 1 // [2:3,3:1]
+        } else {
+            dict[tree[j]] = 1 // [1:1,2:1,3:1]
         }
-        return global
+        while dict.count >= 3 {
+            if let duplicate = dict[tree[i]] { // 1
+                dict[tree[i]] = duplicate - 1 // 0
+            }
+            if dict[tree[i]] == 0 {
+                dict[tree[i]] = nil // [2:1,3:1]
+            }
+            i += 1 // 1
+        }
+        global = max(global, j - i + 1) // 1, 2, 2, 3, 4
     }
+    return global
+}
 
 func totalFruit2(_ nums: [Int]) -> Int {
     var i = 0
@@ -627,7 +627,7 @@ func totalFruit2(_ nums: [Int]) -> Int {
     
     for j in 0..<nums.count {
         if let _ = dict[nums[j]] {
-           dict[nums[j],default: 0] += 1
+            dict[nums[j],default: 0] += 1
         } else {
             dict[nums[j]] = 1
         }
@@ -646,34 +646,34 @@ func totalFruit2(_ nums: [Int]) -> Int {
 }
 
 func lengthOfLongestSubstring3(_ s: String) -> Int {
-        guard s.count > 0 else { return 0 }
+    guard s.count > 0 else { return 0 }
+    
+    let sArr = Array(s) // pwwkew
+    
+    var lastIndexes: [Character: Int] = [:]
+    
+    var result = Int.min
+    
+    var windowStart = 0
+    for windowEnd in 0..<sArr.count { // 0, 1, 2, 3, 4, 5
+        let rightCharacter = sArr[windowEnd] // p, w, w, k, e, w
         
-        let sArr = Array(s) // pwwkew
-        
-        var lastIndexes: [Character: Int] = [:]
-        
-        var result = Int.min
-        
-        var windowStart = 0
-        for windowEnd in 0..<sArr.count { // 0, 1, 2, 3, 4, 5
-            let rightCharacter = sArr[windowEnd] // p, w, w, k, e, w
-
-            // if we have seen a character before, remove characters up until seenIndex
-            if let seenIndex = lastIndexes[rightCharacter] { // 1
-                while windowStart <= seenIndex {
-                    let leftCharacter = sArr[windowStart] // p
-                    lastIndexes[leftCharacter] = nil // remove p
-                    windowStart += 1 // 1
-                }
+        // if we have seen a character before, remove characters up until seenIndex
+        if let seenIndex = lastIndexes[rightCharacter] { // 1
+            while windowStart <= seenIndex {
+                let leftCharacter = sArr[windowStart] // p
+                lastIndexes[leftCharacter] = nil // remove p
+                windowStart += 1 // 1
             }
-            
-            // calculate current string length and compare it with max length
-            lastIndexes[rightCharacter] = windowEnd // [k:3,e:4,w:5]
-            result = max(result, windowEnd - windowStart + 1) // 1, 2, 1, 2, 3, 3
         }
         
-        return result
+        // calculate current string length and compare it with max length
+        lastIndexes[rightCharacter] = windowEnd // [k:3,e:4,w:5]
+        result = max(result, windowEnd - windowStart + 1) // 1, 2, 1, 2, 3, 3
     }
+    
+    return result
+}
 
 // MARK: - Longest Substring Without Repeating Characters - Leetcode 3
 
@@ -703,7 +703,7 @@ func numSubarrayProductLessThanK(_ nums: [Int], _ k: Int) -> Int {
     var result = 0
     var curr = 1
     var slow = 0
-
+    
     for fast in 0 ..< nums.count { // 0, 1
         curr *= nums[fast] // 10, 50
         while curr >= k && slow <= fast {
@@ -712,7 +712,7 @@ func numSubarrayProductLessThanK(_ nums: [Int], _ k: Int) -> Int {
         }
         result += (fast - slow + 1) // 1, 3
     }
-
+    
     return result
 }
 
@@ -721,55 +721,63 @@ func numSubarrayProductLessThanK(_ nums: [Int], _ k: Int) -> Int {
 // [2,0,2,1,1,0]
 
 // - Complexity:
-  //   - time: O(n), where n is the length of the nums.
-  //   - space: O(1), only constant space is used.
+//   - time: O(n), where n is the length of the nums.
+//   - space: O(1), only constant space is used.
 
-  func sortColors(_ nums: inout [Int]) {
-      var zeroIndex = 0
-      var twoIndex = nums.count - 1
-      var i = 0
-
-      while i <= twoIndex {
-          if nums[i] == 0, i > zeroIndex {
-              nums.swapAt(i, zeroIndex)
-              zeroIndex += 1
-
-          } else if nums[i] == 2, i < twoIndex {
-              nums.swapAt(i, twoIndex)
-              twoIndex -= 1
-
-          } else {
-              i += 1
-          }
-      }
-  }
+func sortColors(_ nums: inout [Int]) {
+    var zeroIndex = 0
+    var twoIndex = nums.count - 1
+    var i = 0
+    
+    while i <= twoIndex {
+        if nums[i] == 0, i > zeroIndex {
+            nums.swapAt(i, zeroIndex)
+            zeroIndex += 1
+            
+        } else if nums[i] == 2, i < twoIndex {
+            nums.swapAt(i, twoIndex)
+            twoIndex -= 1
+            
+        } else {
+            i += 1
+        }
+    }
+}
 
 // MARK: - Contains Duplicate II 219
 
 func containsNearbyDuplicate(_ nums: [Int], _ k: Int) -> Bool {
-        var dict = [Int: Int]()
-        for (currentIndex, num) in nums.enumerated() { // 0,1; 1,2; 2,3; 3,2
-            if let duplicateIndex = dict[num], currentIndex - duplicateIndex <= k {
-                return true
-            }
-            dict[num] = currentIndex // [1:0,2:1,3:2]
+    var dict = [Int: Int]()
+    for (currentIndex, num) in nums.enumerated() { // 0,1; 1,2; 2,3; 3,2
+        if let duplicateIndex = dict[num], currentIndex - duplicateIndex <= k {
+            return true
         }
-        return false
+        dict[num] = currentIndex // [1:0,2:1,3:2]
     }
+    return false
+}
 
-containsNearbyDuplicate([1,2,3,2], 2)
+// MARK: - Maximum Average Subarray I 643
+// nums = [1,12,-5,-6,50,3], k = 4
+func findMaxAverage(_ nums: [Int], _ k: Int) -> Double {
+    var i = 0
+    var currRes = 0.0
+    var globalRes = Double(Int.min)
+    
+    for j in 0..<nums.count { // 0, 1, 2, 3, 4
+        currRes += Double(nums[j]) // 1, 13, 8, 2, 1, 51
+        if (j - i) + 1 == k { // 4 == 4
+            globalRes = max(globalRes, currRes) // 2,
+            currRes -= Double(nums[i]) // 1,
+            i += 1 // 1
+        }
+    }
+    return Double(globalRes / Double(k))
+}
+
+findMaxAverage([1,12,-5,-6,50,3], 4)
 
 class Tests: XCTestCase {
-    
-    func test713() {
-        let value = numSubarrayProductLessThanK([10,5,2,6], 100)
-        XCTAssertEqual(8, value)
-    }
-    
-    func test713_2() {
-        let value = numSubarrayProductLessThanK([1,2,3], 0)
-        XCTAssertEqual(0, value)
-    }
     
     func test3_0() {
         let value = lengthOfLongestSubstring4("abcabcbb")
@@ -803,7 +811,7 @@ class Tests: XCTestCase {
     
     func test53_0() {
         let value = maxSubArray3([-2,1,-3,4,-1,2,1,-5,4])
-       XCTAssertEqual(value, 6)
+        XCTAssertEqual(value, 6)
     }
     
     func test53_1() {
@@ -849,6 +857,17 @@ class Tests: XCTestCase {
         let value = minSubarrayLen2(nums: [1,1,1,1,1,1,1,1], target: 11)
         XCTAssertEqual(value, 0)
     }
+    
+    func test713() {
+        let value = numSubarrayProductLessThanK([10,5,2,6], 100)
+        XCTAssertEqual(8, value)
+    }
+    
+    func test713_2() {
+        let value = numSubarrayProductLessThanK([1,2,3], 0)
+        XCTAssertEqual(0, value)
+    }
+    
     
 }
 
