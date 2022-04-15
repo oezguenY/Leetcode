@@ -74,6 +74,7 @@ class ListNode {
                 fast = fast?.next?.next // nil
                 slow = slow?.next // 2
             }
+            // in case of odd numbers of nodes
             if fast != nil {
                 slow = slow?.next
             }
@@ -103,6 +104,58 @@ class ListNode {
             
             return pre
         }
+    
+    // MARK: - Reorder List 143
+    
+    func reorderList(_ head: ListNode?) {
+            guard head != nil else { return }
+
+            var slow = head
+            var fast = head
+
+            while fast?.next != nil {
+                slow = slow?.next
+                fast = fast?.next?.next
+            }
+
+            let reversedList = reverseList(slow)
+            mergeLists(head, reversedList)
+        }
+        
+
+        private func reverseList(_ head: ListNode?) -> ListNode? {
+            var prev: ListNode? = nil
+            var curr = head
+            var next: ListNode? = nil
+
+            while curr != nil {
+                next = curr?.next
+
+                curr?.next = prev
+                prev = curr
+                curr = next
+            }
+
+            return prev
+        }
+        
+
+        private func mergeLists(_ first: ListNode?, _ second: ListNode?) {
+            var first = first
+            var second = second
+            var tmp: ListNode? = nil
+
+            while second?.next != nil {
+                tmp = first?.next // next node
+                first?.next = second
+                first = tmp
+
+                tmp = second?.next
+                second?.next = first
+                second = tmp
+            }
+        }
+
 }
 
 // MARK: - Happy Number 202
@@ -152,6 +205,33 @@ private func getNext(_ n: Int) -> Int {
     
     return sum
 }
+
+// - Complexity:
+  //   - time: O(n log(n)), where n is the number of intervals.
+  //   - space: O(n), where n is the number of intervals.
+  
+  func merge(_ intervals: [[Int]]) -> [[Int]] {
+      guard !intervals.isEmpty else { return [] }
+      // sorting by the start value
+      let intervals = intervals.sorted(by: { $0[0] < $1[0] })
+      
+      var ans = [[Int]]()
+      var start = intervals[0][0]
+      var end = intervals[0][1]
+      
+      for interval in intervals {
+          guard end < interval[0] else {
+              end = max(end, interval[1])
+              continue
+          }
+          ans.append([start, end])
+          start = interval[0]
+          end = interval[1]
+      }
+      
+      ans.append([start, end])
+      return ans
+  }
 
 class Tests: XCTestCase {
     

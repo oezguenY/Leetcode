@@ -744,6 +744,20 @@ func numSubarrayProductLessThanK(_ nums: [Int], _ k: Int) -> Int {
       }
   }
 
+// MARK: - Contains Duplicate II 219
+
+func containsNearbyDuplicate(_ nums: [Int], _ k: Int) -> Bool {
+        var dict = [Int: Int]()
+        for (currentIndex, num) in nums.enumerated() { // 0,1; 1,2; 2,3; 3,2
+            if let duplicateIndex = dict[num], currentIndex - duplicateIndex <= k {
+                return true
+            }
+            dict[num] = currentIndex // [1:0,2:1,3:2]
+        }
+        return false
+    }
+
+containsNearbyDuplicate([1,2,3,2], 2)
 
 class Tests: XCTestCase {
     
