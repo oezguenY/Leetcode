@@ -777,6 +777,29 @@ func findMaxAverage(_ nums: [Int], _ k: Int) -> Double {
 
 findMaxAverage([1,12,-5,-6,50,3], 4)
 
+// MARK: - Minimum Difference Between Highest and Lowest of K Scores 1984
+
+// nums = [9,4,1,7], k = 2
+func minimumDifference(_ nums: [Int], _ k: Int) -> Int {
+        let nums = nums.sorted() // make the array well sorted
+        
+        var left = 0         // left end of the window
+        var right = k - 1    // right end of the window
+        var result = Int.max
+        
+        while right < nums.count {
+            result = min(result, nums[right] - nums[left])
+
+            // Moving the window
+            left += 1
+            right += 1
+        }
+
+        return result
+    }
+
+minimumDifference([90], 1)
+
 class Tests: XCTestCase {
     
     func test3_0() {
