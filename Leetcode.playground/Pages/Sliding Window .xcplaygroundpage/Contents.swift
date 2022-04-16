@@ -812,8 +812,23 @@ func containsDuplicate(_ nums: [Int]) -> Bool {
     return false
     }
 
-containsDuplicate([1,2,3,0])
 
+// MARK: - Best Time to buy and sell stock 121
+// - Complexity:
+   //   - time: O(n), where n is the number of prices.
+   //   - space: O(1), only constant space is used.
+   
+   func maxProfit(_ prices: [Int]) -> Int {
+       var minVal = Int.max, maxMoney = Int.min
+       
+       for price in prices { // 7, 1, 5
+           minVal = min(minVal, price) // 7, 1, 1
+           maxMoney = max(maxMoney, price - minVal) // 0, 0, 4
+       }
+       return maxMoney
+   }
+// [7,1,5,3,6,4]
+maxProfit([7,1,5,3,6,4])
 
 
 class Tests: XCTestCase {
