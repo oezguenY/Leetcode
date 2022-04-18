@@ -4,5 +4,7 @@
         <page name='Sliding Window '/>
         <page name='Two Pointers'/>
         <page name='Fast &amp; Slow Pointers'/>
+        <page name='Merge Intervals'/>
+        <page name='Arrays &amp; Hashing'/>
     </pages>
 </playground>
