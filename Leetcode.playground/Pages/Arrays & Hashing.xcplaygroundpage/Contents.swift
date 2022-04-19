@@ -48,5 +48,30 @@ func isAnagram2(_ s: String, _ t: String) -> Bool {
 isAnagram2("car", "rac")
 
 
+func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+  var dict = [Int:Int]()
+  
+  for (i,num) in nums.enumerated() {
+      if let index = dict[target - num] { // 0
+          return [index, i]
+      }
+      dict[num] = i // [2:0,]
+  }
+  return []
+}
+twoSum([3,2,4], 6)
+
+// MARK: - Group Anagrams 49
+
+func groupAnagrams(_ strs: [String]) -> [[String]] {
+    var dict = [[Character]:[String]]()
+    
+    for c in strs {
+        let abc = c.sorted()
+        dict[abc] == nil ? dict[abc] = [c] : dict[abc]?.append(c)
+    }
+    return dict.map({$1})
+    }
 
 
+groupAnagrams(["eat","tea","tan","ate","nat","bat"])
