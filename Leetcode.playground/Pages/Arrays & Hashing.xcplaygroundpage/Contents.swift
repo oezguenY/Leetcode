@@ -90,15 +90,50 @@ func topKFrequent(_ nums: [Int], _ k: Int) -> [Int] {
             hash[num] = 1
         }
     }
-   
+    
     let highest = hash.sorted { $0.value > $1.value }.prefix(k)
     
     for high in highest {
         result.append(high.key)
     }
-
+    
     return result
 }
 
 topKFrequent([1,1,1,2,2,3], 2)
+
+// MARK: - Product of array except self 238
+
+func productExceptSelf(_ nums: [Int]) -> [Int] {
+    var left = [Int]()
+    var right = [Int]()
+    var curSumLeft = 1
+    var curSumRight = 1
+    
+    for i in 0..<nums.count {
+        if i == 0 {
+            left.append(1)
+        } else {
+            curSumLeft *= nums[i-1]
+            left.append(curSumLeft)
+        }
+    }
+    
+    for j in (0..<nums.count).reversed() {
+        if j == nums.count - 1 {
+            right.append(1)
+        } else {
+            curSumRight *= nums[j+1]
+            right.append(curSumRight)
+        }
+    }
+    
+    right.reverse()
+    
+    let result = zip(left, right).map({ $0 * $1 })
+
+    return result
+}
+
+productExceptSelf([1,2,3,4])
 
