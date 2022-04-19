@@ -161,3 +161,18 @@ func longestConsecutive(_ nums: [Int]) -> Int {
 
 
 longestConsecutive([0,3,7,2,5,8,4,6,0,1])
+
+// MARK: - Valid palindrome 125
+
+func isPalindrome(_ s: String) -> Bool {
+    
+    let chars = s.lowercased().filter { $0.isLetter || $0.isNumber }
+    if String(chars.reversed()) == chars {
+        return true
+    }
+    return false
+}
+
+isPalindrome(" ")
+
+
