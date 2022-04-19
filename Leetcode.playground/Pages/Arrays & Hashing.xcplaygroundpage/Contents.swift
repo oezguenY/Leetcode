@@ -131,9 +131,33 @@ func productExceptSelf(_ nums: [Int]) -> [Int] {
     right.reverse()
     
     let result = zip(left, right).map({ $0 * $1 })
-
+    
     return result
 }
 
 productExceptSelf([1,2,3,4])
 
+// MARK: - 128. Longest Consecutive Sequence
+
+func longestConsecutive(_ nums: [Int]) -> Int {
+    guard nums.count > 1 else { return nums.count }
+    let sorted = Set(nums).sorted()
+    var longest = 0
+    var longestSums = [Int]()
+    for i in 1..<sorted.count {
+        if sorted[i] - 1 == sorted[i - 1] {
+            longest += 1
+        } else {
+            longestSums.append(longest)
+            longest = 0
+        }
+    }
+    longestSums.append(longest)
+    var longestAdded = longestSums.max() ?? 0
+    longestAdded += 1
+    
+    return longestAdded
+}
+
+
+longestConsecutive([0,3,7,2,5,8,4,6,0,1])
