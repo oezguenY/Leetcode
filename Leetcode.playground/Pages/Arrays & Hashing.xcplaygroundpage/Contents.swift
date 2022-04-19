@@ -175,4 +175,27 @@ func isPalindrome(_ s: String) -> Bool {
 
 isPalindrome(" ")
 
+// MARK: - Container with most water 11
+
+func maxArea(_ height: [Int]) -> Int {
+    
+    
+    var j = height.count - 1, i = 0
+    var maxArea = Int.min
+    
+    while i <= j { // j = 8
+        let area = (j - i) * min(height[j], height[i])
+        maxArea = max(area, maxArea)
+        if height[i] > height[j] {
+            j -= 1
+        } else {
+            i += 1
+        }
+    }
+    return maxArea
+    
+}
+
+maxArea([1,8,6,2,5,4,8,3,7])
+
 
