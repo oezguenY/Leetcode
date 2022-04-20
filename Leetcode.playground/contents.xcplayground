@@ -6,5 +6,6 @@
         <page name='Fast &amp; Slow Pointers'/>
         <page name='Merge Intervals'/>
         <page name='Arrays &amp; Hashing'/>
+        <page name='Stack'/>
     </pages>
 </playground>
