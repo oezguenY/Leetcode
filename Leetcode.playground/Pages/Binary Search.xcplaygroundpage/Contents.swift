@@ -103,17 +103,13 @@ func minEatingSpeed2(_ piles: [Int], _ h: Int) -> Int {
     var l = 1, r = piles.max()!// r = 11
     var result = r
     while l <= r { // 1 <= 11
-        let m = (l + r) / 2 // 6
-        var hours = 0.0
-        for p in piles {
-            hours += Double(ceil(Double(p) / Double(m))) //[1,1,2,2]
-        }
-       
-        if Int(hours) <= h { // 6 < 8
-            result = min(result, m) // 6
+        let m = (l + r) / 2 // 6, 3, 4
+        let hours = piles.map( { Double(ceil(Double($0) / Double(m)))} ).reduce(0,+)
+        if Int(hours) <= h { // 6 < 8 // 8 == 8
+            result = min(result, m) // 6 // 8
             r = m - 1 // 5
-        } else {
-            l = m + 1
+        } else { // 10 > 8
+            l = m + 1 // 4
         }
     }
     return result
