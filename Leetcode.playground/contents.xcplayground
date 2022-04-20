@@ -7,5 +7,6 @@
         <page name='Merge Intervals'/>
         <page name='Arrays &amp; Hashing'/>
         <page name='Stack'/>
+        <page name='Binary Search'/>
     </pages>
 </playground>
