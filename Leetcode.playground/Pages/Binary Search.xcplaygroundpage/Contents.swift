@@ -272,38 +272,48 @@ class TimeMap {
     init() {
         dic = [:]
     }
-    
+    // in the set function, we set key, value and timestamp
     func set(_ key: String, _ value: String, _ timestamp: Int) {
+        // creating a model out of the values except key, because its the key in our dict
         let model = TimeMapModel(value: value, timestamp: timestamp)
         dic[key, default: []].append(model)
     }
-    
+    // we have to return the value of key which is less than or equal to the one asked, and the closest timestamp value on top of that. What I mean: If we had 10 structs with the same key, and with increasing timestamp values, we want to return the value with the closest timestamp value to the one asked by the get function, which is also smaller or equal to the value asked by the get function
     func get(_ key: String, _ timestamp: Int) -> String {
+        // if the key is not in the dict return ""
+        // in models all the values are stored with a specific key, so all the structs
         guard let models = dic[key] else {
             return ""
         }
-        guard let first = models.first, first.timestamp <= timestamp else {
-            return ""
-        }
+        print(models)
         return binarySearch(models, timestamp)
     }
     
     private func binarySearch(_ models: [TimeMapModel], _ timestamp: Int) -> String {
+        // T(B,2), T(C,5)
+        //  l       m r
         var left = 0
-        var right = models.count
-        var mainModel = TimeMapModel(value: "", timestamp: -1)
-         while left < right {
-             let mid = left + ((right - left) / 2)
-             let model = models[mid]
+        var right = models.count // 2
+        var mainModel = TimeMapModel(value: "", timestamp: -1) //set with any values
+         while left < right { // 0 < 2, 2 < 2 BREAKS OUT
+             let mid = left + ((right - left) / 2) // 1
+             let model = models[mid] // T(C,5)
              if model.timestamp == timestamp {
                  return model.value
              } else if model.timestamp > timestamp {
                  right = mid
              } else {
                  mainModel = model
-                 left = mid + 1
+                 left = mid + 1 // 2
              }
          }
         return mainModel.value
     }
 }
+
+var timestamp = TimeMap()
+timestamp.dic
+timestamp.set("A", "B", 2)
+timestamp.set("A", "C", 5)
+timestamp.set("D", "E", 9)
+timestamp.get("A", 7)
