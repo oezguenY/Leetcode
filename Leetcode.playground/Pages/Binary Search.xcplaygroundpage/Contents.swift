@@ -129,7 +129,7 @@ func searchRotated(_ nums: [Int], _ target: Int) -> Int {
     // [2,4,5,6,7,0,1] // 0
     // [7,0,1,2,4,5,6] // 0
     //  l     m     r
-
+    
     // if left is equal/smaller than middle -> if target is greater than middle or target is smaller than left ITS ON THE RIGHT else ITS ON THE LEFT
     // else if left is not equal/smaller than middle -> if target is smaller than middle or target is greater than right ITS ON THE LEFT else ITS ON THE RIGHT
     
@@ -192,3 +192,68 @@ func searchRotated2( _ nums: [Int], _ target: Int) -> Int {
 
 searchRotated2([7,0,1,2,4,5,6], 0)
 //                lm r
+
+// MARK: - 153. Find Minimum in Rotated Sorted Array
+
+func findMin(_ nums: [Int]) -> Int {
+    
+    var l = 0, r = nums.count - 1
+    var lowest = nums[0]
+    
+    while l <= r {
+        if nums[l] < nums[r] {
+            lowest = min(lowest, nums[l])
+        }
+        let m = (l + r) / 2
+        lowest = min(nums[m], lowest)
+        if nums[l] <= nums[m] {
+            l = m + 1
+        } else {
+            r = m - 1
+        }
+    }
+    return lowest
+}
+
+findMin([4,5,6,7,0,1,2])
+findMin([5,1,2,3,4])
+findMin([4,5,1,2,3])
+findMin([1])
+findMin([3,1,2])
+findMin([3,4,5,1,2])
+findMin([11,13,15,17])
+
+
+func findMin2(_ nums: [Int]) -> Int {
+    
+    var l = 0, r = nums.count - 1, lowest = nums[0]
+    
+    while l <= r {
+        // only if the array is already sorted, l < r
+        if nums[l] < nums[r] {
+            lowest = min(lowest, nums[l])
+            break
+        }
+        let m = (l + r) / 2
+        // if the middle value is largeer/equal than the left value, we have to search the right side
+        // the logic behind this is because we rotate the larger values to the front, so if the array
+        // isnt sorted, the first portion of the array will always be larger than the second
+        if nums[m] >= nums[l] {
+            l = m + 1
+            lowest = min(nums[m], lowest)
+        } else {
+            r = m - 1
+            lowest = min(nums[m], lowest)
+        }
+    }
+    return lowest
+}
+
+
+findMin2([4,5,6,7,0,1,2])
+findMin2([5,1,2,3,4])
+findMin2([4,5,1,2,3])
+findMin2([1])
+findMin2([3,1,2])
+findMin2([3,4,5,1,2])
+findMin2([11,13,15,17])
