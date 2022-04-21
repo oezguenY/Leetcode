@@ -267,7 +267,7 @@ struct TimeMapModel {
     var timestamp: Int
 }
 class TimeMap {
-   var dic: [String: [TimeMapModel]]
+    var dic: [String: [TimeMapModel]]
     // Initialize your data structure here.
     init() {
         dic = [:]
@@ -278,7 +278,7 @@ class TimeMap {
         let model = TimeMapModel(value: value, timestamp: timestamp)
         dic[key, default: []].append(model)
     }
-    // we have to return the value of key which is less than or equal to the one asked, and the closest timestamp value on top of that. What I mean: If we had 10 structs with the same key, and with increasing timestamp values, we want to return the value with the closest timestamp value to the one asked by the get function, which is also smaller or equal to the value asked by the get function
+    // we have to return the value of key which is less than or equal to the one asked, and the closest timestamp value on top of that. What I mean: If we had 10 structs with the same key, and with increasing timestamp (look at the constraints section of the problem) values, we want to return the value with the closest timestamp value to the one asked by the get function, which is also smaller or equal to the value asked by the get function
     func get(_ key: String, _ timestamp: Int) -> String {
         // if the key is not in the dict return ""
         // in models all the values are stored with a specific key, so all the structs
@@ -295,18 +295,18 @@ class TimeMap {
         var left = 0
         var right = models.count // 2
         var mainModel = TimeMapModel(value: "", timestamp: -1) //set with any values
-         while left < right { // 0 < 2, 2 < 2 BREAKS OUT
-             let mid = left + ((right - left) / 2) // 1
-             let model = models[mid] // T(C,5)
-             if model.timestamp == timestamp {
-                 return model.value
-             } else if model.timestamp > timestamp {
-                 right = mid
-             } else {
-                 mainModel = model
-                 left = mid + 1 // 2
-             }
-         }
+        while left < right { // 0 < 2, 2 < 2 BREAKS OUT
+            let mid =  (right + left) / 2 // 1
+            let model = models[mid] // T(C,5)
+            if model.timestamp == timestamp {
+                return model.value
+            } else if model.timestamp > timestamp {
+                right = mid
+            } else {
+                mainModel = model
+                left = mid + 1 // 2
+            }
+        }
         return mainModel.value
     }
 }
@@ -317,3 +317,21 @@ timestamp.set("A", "B", 2)
 timestamp.set("A", "C", 5)
 timestamp.set("D", "E", 9)
 timestamp.get("A", 7)
+
+// MARK: - 2089. Find Target Indices After Sorting Array
+
+func targetIndices(_ nums: [Int], _ target: Int) -> [Int] {
+    let sortedNums = nums.sorted()
+    var indices = [Int]()
+    
+    for i in 0..<sortedNums.count {
+        if sortedNums[i] == target {
+            indices.append(i)
+        }
+    }
+    return indices
+}
+
+targetIndices([1,2,5,2,3], 2)
+
+
