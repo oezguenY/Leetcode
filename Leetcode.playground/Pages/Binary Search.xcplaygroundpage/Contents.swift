@@ -158,3 +158,37 @@ func searchRotated(_ nums: [Int], _ target: Int) -> Int {
 }
 
 searchRotated([7,0,1,2,4,5,6], 0)
+
+
+func searchRotated2( _ nums: [Int], _ target: Int) -> Int {
+    
+    // if left is less than mid, the left half is sorted
+    // then i can ask whether the target value is <= to left and <= mid (so between the left and mid)
+    // if its not there we shift the left pointer to mid + 1
+    // if left is greater than mid, right half is sorted
+    
+    var l = 0, r = nums.count - 1
+    
+    while l <= r {
+        let m = (l + r) / 2 // 3 // 1
+        if nums[m] == target { return m } // if its found, return the index
+        
+        if nums[m] >= nums[l] {//if mid value is larger or equalthan left value, left part is sorted
+            if nums[l] <= target && target <= nums[m] { // is our value in the sorted portion?
+                r = m - 1 // if yes, exonerate the right half
+            } else {
+                l = m + 1 // if no, exonerate the left half
+            }
+        } else { // else if middle value is smaller than left, right part is sorted
+            if nums[r] >= target && target >= nums[m] { // is our value in the sorted portion?
+                l = m + 1 // if yes, exonerate left half
+            } else {
+                r = m - 1 // if no, exonerate right half // r = 2
+            }
+        }
+    }
+    return -1
+}
+
+searchRotated2([7,0,1,2,4,5,6], 0)
+//                lm r
