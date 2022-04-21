@@ -117,3 +117,44 @@ func minEatingSpeed2(_ piles: [Int], _ h: Int) -> Int {
 
 
 minEatingSpeed2([3,6,7,11], 8)
+
+// MARK: - 33. Search in Rotated Sorted Array
+
+func searchRotated(_ nums: [Int], _ target: Int) -> Int {
+    
+    
+    // [4,5,6,7,0,1,2]
+    // [0,1,2,4,5,6,7]
+    // [6,7,0,1,2,4,5]
+    // [2,4,5,6,7,0,1] // 0
+    // [7,0,1,2,4,5,6] // 0
+    //  l     m     r
+
+    // if left is equal/smaller than middle -> if target is greater than middle or target is smaller than left ITS ON THE RIGHT else ITS ON THE LEFT
+    // else if left is not equal/smaller than middle -> if target is smaller than middle or target is greater than right ITS ON THE LEFT else ITS ON THE RIGHT
+    
+    var l = 0, r = nums.count - 1
+    
+    while l <= r {
+        let m = (l + r) / 2
+        if target == nums[m] {
+            return m
+        }
+        if nums[l] <= nums[m] {
+            if target > nums[m] || target < nums[l]  {
+                l = m + 1
+            } else {
+                r = m - 1
+            }
+        } else {
+            if target < nums[m] || target > nums[r] {
+                r = m - 1
+            } else {
+                l = m + 1
+            }
+        }
+    }
+    return -1
+}
+
+searchRotated([7,0,1,2,4,5,6], 0)
