@@ -257,3 +257,53 @@ findMin2([1])
 findMin2([3,1,2])
 findMin2([3,4,5,1,2])
 findMin2([11,13,15,17])
+
+
+// MARK: - 981. Time Based Key-Value Store
+
+
+struct TimeMapModel {
+    var value: String
+    var timestamp: Int
+}
+class TimeMap {
+   var dic: [String: [TimeMapModel]]
+    // Initialize your data structure here.
+    init() {
+        dic = [:]
+    }
+    
+    func set(_ key: String, _ value: String, _ timestamp: Int) {
+        let model = TimeMapModel(value: value, timestamp: timestamp)
+        dic[key, default: []].append(model)
+    }
+    
+    func get(_ key: String, _ timestamp: Int) -> String {
+        guard let models = dic[key] else {
+            return ""
+        }
+        guard let first = models.first, first.timestamp <= timestamp else {
+            return ""
+        }
+        return binarySearch(models, timestamp)
+    }
+    
+    private func binarySearch(_ models: [TimeMapModel], _ timestamp: Int) -> String {
+        var left = 0
+        var right = models.count
+        var mainModel = TimeMapModel(value: "", timestamp: -1)
+         while left < right {
+             let mid = left + ((right - left) / 2)
+             let model = models[mid]
+             if model.timestamp == timestamp {
+                 return model.value
+             } else if model.timestamp > timestamp {
+                 right = mid
+             } else {
+                 mainModel = model
+                 left = mid + 1
+             }
+         }
+        return mainModel.value
+    }
+}
