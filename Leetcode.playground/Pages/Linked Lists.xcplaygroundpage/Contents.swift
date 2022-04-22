@@ -2,6 +2,48 @@
 import Foundation
 import XCTest
 
+
+// MARK: - 206. Reverse Linked List
+
+class Node {
+    var val: Int
+    var next: Node?
+    
+    init() {
+        self.val = 0
+        self.next = nil
+    }
+    
+    init(_ val: Int) {
+        self.val = val
+        self.next = nil
+    }
+    
+    init(_ val: Int, _ next: Node? = nil) {
+        self.val = val
+        self.next = next
+    }
+    
+    func reverseList(_ head: Node?) -> Node? {
+        guard head?.next != nil else { return head }
+        var cur = head
+        var prev: Node? = nil
+        var next = cur?.next
+        
+
+        while next != nil {
+            next = cur?.next
+            cur?.next = prev
+            prev = cur
+            cur = next
+        }
+        return prev
+    }
+    
+}
+
+
+
 class ListNode {
     var val: Int
     var next: ListNode?
