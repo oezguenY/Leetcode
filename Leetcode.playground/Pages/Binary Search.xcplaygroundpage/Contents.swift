@@ -285,7 +285,7 @@ class TimeMap {
         guard let models = dic[key] else {
             return ""
         }
-        print(models)
+        //        print(models)
         return binarySearch(models, timestamp)
     }
     
@@ -334,4 +334,82 @@ func targetIndices(_ nums: [Int], _ target: Int) -> [Int] {
 
 targetIndices([1,2,5,2,3], 2)
 
+
+// MARK: - 1351. Count Negative Numbers in a Sorted Matrix
+
+func countNegatives(_ grid: [[Int]]) -> Int {
+    let flatted = grid.flatMap({ $0 })
+    var count = 0
+    
+    for num in flatted {
+        if num < 0 {
+            count += 1
+        }
+    }
+    return count
+}
+
+countNegatives([[4,3,2,-1],[3,2,1,-1],[1,1,-1,-2],[-1,-1,-2,-3]])
+
+
+// MARK: - 981. Time Based Key-Value Store
+
+/*
+ - The task asks us to create a datastructure that can store multiple values with the same key.
+ - we have to specify a set function, thats fed with key, value and timestamp
+ - the key is of type string, the value of type string and the timestamp of type int
+ - the corresponding datastructure might look like this: [key: [value,timestamp]]
+ - alternatively, we can store structs like this: [key: [Struct(value,timestamp)]]
+ - the task specifies that the timestamps are strictly increasing, so we dont have to sort them
+ 
+ */
+
+struct TimeModel {
+    let value: String
+    let timeStamp: Int
+}
+
+class TimeMap2 {
+    
+    var dict: [String:[TimeModel]]
+    
+    init() {
+        dict = [:]
+    }
+    
+    func set(key: String, value: String, timeStamp: Int) -> Void {
+        dict[key, default: []].append(TimeModel(value: value, timeStamp: timeStamp))
+        print(dict)
+    }
+    
+    func get(key: String, timeStamp: Int) -> String {
+        // we want to get the value of the dictionary that is closest to the timeStamp
+        guard let models = dict[key] else {
+            return ""
+        }
+        
+        return binarySearch(models: models, timeStamp: timeStamp)
+    }
+    
+    private func binarySearch(models: [TimeModel], timeStamp: Int) -> String {
+        var l = 0, r = models.count - 1, val = ""
+        // T(B,2), T(C,5), T(D,8)
+        //  lmr
+        while l <= r { // BREAKOUT
+            let m = (l + r) / 2 // 1, 0
+            if models[m].timeStamp <= timeStamp {
+                val = models[m].value // B
+                l = m + 1 // 1
+            } else {
+                r = m - 1 // 0
+            }
+    }
+        return val
+    }
+}
+
+var timeMap = TimeMap2()
+timeMap.set(key: "A", value: "1", timeStamp: 1)
+timeMap.set(key: "A", value: "2", timeStamp: 2)
+timeMap.get(key: "A", timeStamp: 3)
 
