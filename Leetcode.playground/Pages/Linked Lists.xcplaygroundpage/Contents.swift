@@ -39,6 +39,27 @@ class Node {
         return prev
     }
     
+
+}
+
+class ListNode {
+    var val: Int
+    var next: ListNode?
+    init() {
+        self.val = 0
+        self.next = nil
+    }
+    
+    init(_ val: Int) {
+        self.val = val
+        self.next = nil
+    }
+    
+    init(_ val: Int, _ next: ListNode? = nil) {
+        self.val = val
+        self.next = next
+    }
+    
     // MARK: - 19. Remove Nth Node From End of List
     
     func removeNthFromEnd(_ head: ListNode?, _ n: Int) -> ListNode? {
@@ -60,15 +81,37 @@ class Node {
         
         return head
     }
-}
-
-class ListNode {
-    var val: Int
-    var next: ListNode?
-    init(_ val: Int) {
-        self.val = val
-        self.next = nil
-    }
+    
+    // MARK: - 2. Add Two Numbers
+    
+    func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
+            var l1: ListNode? = l1
+            var l2: ListNode? = l2
+            
+            var result: ListNode? = ListNode(0)
+            let head = result
+            
+            var carry = 0
+        // while either linked list has a digit
+            while l1 != nil || l2 != nil || carry > 0 {
+                let firstValue = l1?.val ?? 0 // 2, 4, 3
+                let secondValue = l2?.val ?? 0 // 5, 6, 4
+                // sum the digits
+                let sum = firstValue + secondValue + carry // 7, 10, 8
+                // if we have a sum of 15, value would be 5
+                let value = sum % 10 // 7, 0, 8
+                // sum of 15, carry would be 1
+                carry = sum / 10 // 0, 1, 0
+                
+                result?.next = ListNode(value) // 0 -> 7 -> 0 -> 8
+                result = result?.next // 7, 0, 8
+                l1 = l1?.next // 4, 3, nil
+                l2 = l2?.next // 6, 4, nil
+            }
+            
+            return head?.next // 7
+        }
+    // l1 = [2,4,3], l2 = [5,6,4]
     
     // MARK: - Linked List Cycle 141
     // - Complexity:
