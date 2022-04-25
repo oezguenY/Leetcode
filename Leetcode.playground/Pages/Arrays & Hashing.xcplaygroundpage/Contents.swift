@@ -198,4 +198,21 @@ func maxArea(_ height: [Int]) -> Int {
 
 maxArea([1,8,6,2,5,4,8,3,7])
 
+// MARK: - 287. Find the Duplicate Number
+
+    func findDuplicate(_ nums: [Int]) -> Int {
+        
+        var hash: [Int:Int] = [:]
+        
+        for i in 0..<nums.count { // 0, 1, 2, 3, 4
+            if let _ = hash[nums[i]] { //
+                return nums[i]
+            } else {
+                hash[nums[i],default: 0] += 1 // [1:1,3:1,4:1,2:1]
+            }
+        }
+        return -1
+    }
+
+findDuplicate([1,3,4,2,2])
 
