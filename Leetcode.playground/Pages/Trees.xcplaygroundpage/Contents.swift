@@ -54,9 +54,46 @@ class TreeNode {
             return maxLevel
         }
     
+    // MARK: - 543. Diameter of Binary Tree
+    
+    func heightOfBinaryTree(_ root: TreeNode?) -> Int {
+          guard let node = root else { return 0 }
+          return 1 + max(heightOfBinaryTree(node.left), heightOfBinaryTree(node.right));
+      }
+      
+      func diameterOfBinaryTree(_ root: TreeNode?) -> Int {
+          guard let node = root else { return 0 }
+          let hl = heightOfBinaryTree(node.left)
+          let hr = heightOfBinaryTree(node.right)
+          
+          return max(hl + hr, max(diameterOfBinaryTree(node.left), diameterOfBinaryTree(node.right)))
+      }
+    
+    // MARK: - 110. Balanced Binary Tree
+    
+    func isBalanced(_ root: TreeNode?) -> Bool {
+        return isBalancedTree(root).balanced
+    }
+    
+    
+    func isBalancedTree(_ node: TreeNode?) -> (height: Int, balanced: Bool) {
+        guard let node = node else { return (-1, true) }
+        
+        let left = isBalancedTree(node.left)
+        guard left.balanced else { return(-1, false) }
+                
+        let right = isBalancedTree(node.right)
+        guard right.balanced else { return (-1, false) }
+        
+        guard abs(left.height - right.height) < 2 else { return (-1, false) }
+        
+        return (max(left.height, right.height) + 1, true)
+    }
+    
     
     
 }
+
 
 
 
