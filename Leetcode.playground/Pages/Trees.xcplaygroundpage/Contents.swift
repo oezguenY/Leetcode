@@ -13,7 +13,7 @@ class TreeNode {
     }
     
     // MARK: - 226. Invert Binary Tree
-
+    
     func invertTree(_ root: TreeNode?) -> TreeNode? {
         if root == nil {
             return nil
@@ -27,8 +27,14 @@ class TreeNode {
         self.invertTree(root?.right)
         return root
     }
+    
+    // MARK: - 104. Maximum Depth of Binary Tree
+    
+    func maxDepthDFS(_ root: TreeNode?) -> Int {
+        return root != nil ? 1 + max(self.maxDepthDFS(root?.left), self.maxDepthDFS(root?.right)) : 0
+    }
+
 }
-// [4,2,7,1,3,6,9]
 
 
 
