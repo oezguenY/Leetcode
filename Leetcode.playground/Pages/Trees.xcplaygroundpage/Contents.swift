@@ -93,13 +93,15 @@ class TreeNode {
     // MARK: - 100. Same Tree
     
     func isSameTree(_ p: TreeNode?, _ q: TreeNode?) -> Bool {
+        // 1. Basecase: If both nodes are nil, we have equality
         if p == nil && q == nil {
             return true
         }
+        // 2. Basecase: We have inequality, if either one of the nodes is nil but the other isnt, or if the values of the nodes are unequal. Then we return false
         if p == nil || q == nil || p?.val != q?.val {
             return false
         }
-        
+        // if both of the base cases were not true, we deduce that both of our nodes do have a value and are equal
         return (self.isSameTree(p?.left, q?.left) && self.isSameTree(p?.right, q?.right))
     }
     
