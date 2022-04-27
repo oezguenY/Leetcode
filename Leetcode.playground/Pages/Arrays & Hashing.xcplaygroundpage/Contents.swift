@@ -320,3 +320,27 @@ func countKDifference(_ nums: [Int], _ k: Int) -> Int {
     }
     return count
 }
+
+// MARK: - 1684. Count the Number of Consistent Strings
+
+func countConsistentStrings(_ allowed: String, _ words: [String]) -> Int {
+    return words.filter({Set($0).subtracting(Set(allowed)).count == 0}).count
+    }
+
+countConsistentStrings("ab", ["ad","bd","aaab","baa","badab"])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
