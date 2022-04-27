@@ -354,6 +354,41 @@ func checkIfPangram(_ sentence: String) -> Bool {
 checkIfPangram("thequickbrownfoxjumpsoverthelazydog")
 
 
+func checkIfPangram2(_ sentence: String) -> Bool {
+        Set(sentence).count == 26
+    }
+
+
+// MARK: - 2206. Divide Array Into Equal Pairs
+
+func divideArray(_ nums: [Int]) -> Bool {
+    var hash = [Int:Int]()
+    
+    for num in nums {
+        hash[num,default: 0] += 1
+    }
+    
+    return hash.filter({$0.value % 2 != 0}).count < 1
+}
+divideArray([3,2,3,2,2,2])
+
+// MARK: - 1941. Check if All Characters Have Equal Number of Occurrences
+
+func areOccurrencesEqual(_ s: String) -> Bool {
+    var result = Set<Int>()
+    var hash = [Character:Int]()
+    
+    for c in s {
+        hash[c, default: 0] += 1
+    }
+    
+    hash.values.forEach {
+        result.insert($0)
+    }
+    return result.count == 1
+}
+
+areOccurrencesEqual("abacbc")
 
 
 
