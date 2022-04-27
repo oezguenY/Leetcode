@@ -355,8 +355,8 @@ checkIfPangram("thequickbrownfoxjumpsoverthelazydog")
 
 
 func checkIfPangram2(_ sentence: String) -> Bool {
-        Set(sentence).count == 26
-    }
+    Set(sentence).count == 26
+}
 
 
 // MARK: - 2206. Divide Array Into Equal Pairs
@@ -390,14 +390,27 @@ func areOccurrencesEqual(_ s: String) -> Bool {
 
 areOccurrencesEqual("abacbc")
 
+// MARK: - 1748. Sum of Unique Elements
 
+func sumOfUnique(_ nums: [Int]) -> Int {
+    return nums.reduce(into: [Int: Int](), { $0[$1, default: Int(0)] += 1 }).reduce(into: 0, { $0 += $1.1 == 1 ? $1.0 : 0 })
+}
 
+sumOfUnique([1,2,3,2])
+// [3: 1, 2: 2, 1: 1]
 
+func sumOfUnique2(_ nums: [Int]) -> Int {
+    return nums.reduce(into: [:], {$0[$1, default: 0] += 1}).reduce(into: 0, {$0 += $1.1 == 1 ? $1.0 : 0})
+}
 
-
-
-
-
-
-
-
+sumOfUnique2([1,2,3,2])
+   
+func sumOfUnique3(_ nums: [Int]) -> Int {
+    return nums.reduce(into: [:]) { dict,num in
+        dict[num, default: 0] += 1
+    }.reduce(into: 0) { initialResult,dictValue in
+        initialResult += dictValue.1 == 1 ? dictValue.0 : 0
+    }
+}
+    
+    
