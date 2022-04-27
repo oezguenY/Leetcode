@@ -445,8 +445,35 @@ func twoOutOfThree(_ nums1: [Int], _ nums2: [Int], _ nums3: [Int]) -> [Int] {
    return flattedSet
 }
 
-twoOutOfThree([3,1], [2,3], [1,2])
+twoOutOfThree([1,1,3,2], [2,3], [3])
 
+// MARK: - 2053. Kth Distinct String in an Array
+
+func kthDistinct(_ arr: [String], _ k: Int) -> String {
+    var hash: [String:Int] = [:], resultArr = [String]()
+    
+    
+    for i in 0..<arr.count {
+        hash[arr[i],default: 0] += 1
+    }
+    
+    hash = hash.filter({ $0.value < 2 })
+    
+    for str in arr {
+        if hash.keys.contains(str) {
+            resultArr.append(str)
+        }
+    }
+    
+    if resultArr.count < k {
+        return ""
+    }
+    
+    return resultArr[k-1]
+    
+}
+
+kthDistinct(["d","b","c","b","c","a"], 2)
 
 
 
