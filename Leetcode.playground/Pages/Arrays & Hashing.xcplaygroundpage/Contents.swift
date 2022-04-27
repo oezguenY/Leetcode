@@ -252,6 +252,21 @@ func numIdenticalPairs3(_ nums: [Int]) -> Int {
     return count
 }
 
-
 numIdenticalPairs3([1,2,3,1,1,3])
 numIdenticalPairs([1,1,1,1])
+
+// MARK: - 771. Jewels and Stones
+
+func numJewelsInStones(_ jewels: String, _ stones: String) -> Int {
+    var count = 0
+    
+    stones.forEach {
+        if jewels.contains($0) {
+            count += 1
+        }
+    }
+    return count
+}
+
+numJewelsInStones("aA", "aAAbbbb")
+numJewelsInStones("z", "ZZ")
