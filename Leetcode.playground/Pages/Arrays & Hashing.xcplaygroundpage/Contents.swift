@@ -216,3 +216,42 @@ maxArea([1,8,6,2,5,4,8,3,7])
 
 findDuplicate([1,3,4,2,2])
 
+
+// MARK: - 1512. Number of Good Pairs
+// Brute Force
+func numIdenticalPairs(_ nums: [Int]) -> Int {
+    var count = 0
+    for i in 0..<nums.count {
+        for j in i+1..<nums.count {
+            if nums[i] == nums[j] {
+                count += 1
+            }
+        }
+    }
+    return count
+}
+
+// Efficient
+
+func numIdenticalPairs2(_ nums: [Int]) -> Int {
+        var res = 0, map = [Int:Int]()
+        nums.forEach { // 1, 2, 3, 1, 1, 3 // 1, 1, 1, 1
+            res += map[$0] ?? 0 // 1, 3, 4 // 1, 3, 6
+            map[$0,default: 0] += 1 // [1:2,2:1,3:2] // [1:3]
+        }
+        return res
+    }
+
+func numIdenticalPairs3(_ nums: [Int]) -> Int {
+    var count = 0, hash = [Int:Int]()
+    
+    nums.forEach {
+        count += hash[$0] ?? 0
+        hash[$0,default: 0] += 1
+    }
+    return count
+}
+
+
+numIdenticalPairs3([1,2,3,1,1,3])
+numIdenticalPairs([1,1,1,1])
