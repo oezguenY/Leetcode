@@ -200,19 +200,19 @@ maxArea([1,8,6,2,5,4,8,3,7])
 
 // MARK: - 287. Find the Duplicate Number
 
-    func findDuplicate(_ nums: [Int]) -> Int {
-        
-        var hash: [Int:Int] = [:]
-        
-        for i in 0..<nums.count { // 0, 1, 2, 3, 4
-            if let _ = hash[nums[i]] { //
-                return nums[i]
-            } else {
-                hash[nums[i],default: 0] += 1 // [1:1,3:1,4:1,2:1]
-            }
+func findDuplicate(_ nums: [Int]) -> Int {
+    
+    var hash: [Int:Int] = [:]
+    
+    for i in 0..<nums.count { // 0, 1, 2, 3, 4
+        if let _ = hash[nums[i]] { //
+            return nums[i]
+        } else {
+            hash[nums[i],default: 0] += 1 // [1:1,3:1,4:1,2:1]
         }
-        return -1
     }
+    return -1
+}
 
 findDuplicate([1,3,4,2,2])
 
@@ -234,13 +234,13 @@ func numIdenticalPairs(_ nums: [Int]) -> Int {
 // Efficient
 
 func numIdenticalPairs2(_ nums: [Int]) -> Int {
-        var res = 0, map = [Int:Int]()
-        nums.forEach { // 1, 2, 3, 1, 1, 3 // 1, 1, 1, 1
-            res += map[$0] ?? 0 // 1, 3, 4 // 1, 3, 6
-            map[$0,default: 0] += 1 // [1:2,2:1,3:2] // [1:3]
-        }
-        return res
+    var res = 0, map = [Int:Int]()
+    nums.forEach { // 1, 2, 3, 1, 1, 3 // 1, 1, 1, 1
+        res += map[$0] ?? 0 // 1, 3, 4 // 1, 3, 6
+        map[$0,default: 0] += 1 // [1:2,2:1,3:2] // [1:3]
     }
+    return res
+}
 
 func numIdenticalPairs3(_ nums: [Int]) -> Int {
     var count = 0, hash = [Int:Int]()
@@ -270,3 +270,37 @@ func numJewelsInStones(_ jewels: String, _ stones: String) -> Int {
 
 numJewelsInStones("aA", "aAAbbbb")
 numJewelsInStones("z", "ZZ")
+
+// MARK: - 1365. How Many Numbers Are Smaller Than the Current Number
+
+func smallerNumbersThanCurrent(_ nums: [Int]) -> [Int] {
+    let sortedNums = nums.sorted() // [1,2,2,3,8]
+    var dict = [Int:Int]()
+    
+    for (index, n) in sortedNums.enumerated() {
+        if dict[n] == nil {
+            // the values correspond to the number of integer the key is bigger than
+            dict[n] = index // [1:0,2:1,3:3,8:4]
+        }
+    }
+    
+    // then we transform every value in the array to the corresponding dictinary value for the key
+    return nums.map { dict[$0]! }
+}
+
+smallerNumbersThanCurrent([8,1,2,2,3])
+
+
+func smallerNumbersThanCurrent2(_ nums: [Int]) -> [Int] {
+    let sortedNums = nums.sorted()
+    var hash = [Int:Int]()
+    
+    for (index,num) in sortedNums.enumerated() {
+        if hash[num] == nil {
+            hash[num] = index
+        }
+    }
+    return nums.map( {hash[$0]!} )
+}
+
+smallerNumbersThanCurrent2([1,1,1,1,1,2,2,3,5,6,8])
