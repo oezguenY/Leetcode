@@ -304,3 +304,19 @@ func smallerNumbersThanCurrent2(_ nums: [Int]) -> [Int] {
 }
 
 smallerNumbersThanCurrent2([1,1,1,1,1,2,2,3,5,6,8])
+
+// MARK: - 2006. Count Number of Pairs With Absolute Difference K
+
+func countKDifference(_ nums: [Int], _ k: Int) -> Int {
+        
+    var count = 0
+    
+    for i in 0..<nums.count {
+        for j in i+1..<nums.count {
+            if abs(nums[i] - nums[j]) == k {
+                count += 1
+            }
+        }
+    }
+    return count
+}
