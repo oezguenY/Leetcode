@@ -308,7 +308,7 @@ smallerNumbersThanCurrent2([1,1,1,1,1,2,2,3,5,6,8])
 // MARK: - 2006. Count Number of Pairs With Absolute Difference K
 
 func countKDifference(_ nums: [Int], _ k: Int) -> Int {
-        
+    
     var count = 0
     
     for i in 0..<nums.count {
@@ -325,11 +325,33 @@ func countKDifference(_ nums: [Int], _ k: Int) -> Int {
 
 func countConsistentStrings(_ allowed: String, _ words: [String]) -> Int {
     return words.filter({Set($0).subtracting(Set(allowed)).count == 0}).count
-    }
+}
 
 countConsistentStrings("ab", ["ad","bd","aaab","baa","badab"])
 
+// MARK: - 2103. Rings and Rods
 
+func countPoints(_ rings: String) -> Int {
+    if rings.isEmpty { return 0 }
+    var count = 0
+    for i in 0..<10 {
+        if rings.contains("B\(i)") && rings.contains("R\(i)") && rings.contains("G\(i)") {
+            count += 1
+        }
+    }
+    return count
+    
+}
+
+// MARK: - 1832. Check if the Sentence Is Pangram
+
+func checkIfPangram(_ sentence: String) -> Bool {
+    let charSet = Set("abcdefghijklmnopqrstuvwxyz")
+    
+    return charSet.subtracting(sentence).count == 0 ? true : false
+}
+
+checkIfPangram("thequickbrownfoxjumpsoverthelazydog")
 
 
 
