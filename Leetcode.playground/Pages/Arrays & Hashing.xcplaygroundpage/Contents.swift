@@ -413,4 +413,13 @@ func sumOfUnique3(_ nums: [Int]) -> Int {
     }
 }
     
-    
+// MARK: - 961. N-Repeated Element in Size 2N Array
+
+func repeatedNTimes(_ nums: [Int]) -> Int {
+        
+    return nums.reduce(into: [:], {$0[$1,default: 0] += 1}).reduce(into: 0, {$0 += $1.value > 1 ? $1.0 : 0})
+}
+
+repeatedNTimes([5,1,5,2,5,3,5,4])
+
+
