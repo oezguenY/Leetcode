@@ -404,7 +404,7 @@ func sumOfUnique2(_ nums: [Int]) -> Int {
 }
 
 sumOfUnique2([1,2,3,2])
-   
+
 func sumOfUnique3(_ nums: [Int]) -> Int {
     return nums.reduce(into: [:]) { dict,num in
         dict[num, default: 0] += 1
@@ -412,14 +412,41 @@ func sumOfUnique3(_ nums: [Int]) -> Int {
         initialResult += dictValue.1 == 1 ? dictValue.0 : 0
     }
 }
-    
+
 // MARK: - 961. N-Repeated Element in Size 2N Array
 
 func repeatedNTimes(_ nums: [Int]) -> Int {
-        
+    
     return nums.reduce(into: [:], {$0[$1,default: 0] += 1}).reduce(into: 0, {$0 += $1.value > 1 ? $1.0 : 0})
 }
 
 repeatedNTimes([5,1,5,2,5,3,5,4])
+
+// MARK: - 2154. Keep Multiplying Found Values by Two
+
+func findFinalValue(_ nums: [Int], _ original: Int) -> Int {
+    var original = original
+    
+    while nums.contains(original) {
+        original *= 2
+    }
+    
+    return original
+}
+
+findFinalValue([8,19,4,2,15,3], 2)
+
+// MARK: - 2032. Two Out of Three
+
+func twoOutOfThree(_ nums1: [Int], _ nums2: [Int], _ nums3: [Int]) -> [Int] {
+    let set1 = Set(nums1), set2 = Set(nums2), set3 = Set(nums3)
+    let superSet = Array(arrayLiteral: Array(set1),Array(set2),Array(set3))
+    let flattedSet = Array(superSet.flatMap({ $0 }).reduce(into: [:], { $0[$1, default: 0] += 1 }).filter({ $0.value > 1}).keys)
+   return flattedSet
+}
+
+twoOutOfThree([3,1], [2,3], [1,2])
+
+
 
 
