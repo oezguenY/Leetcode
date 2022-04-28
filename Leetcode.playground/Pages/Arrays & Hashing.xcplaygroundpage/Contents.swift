@@ -475,5 +475,35 @@ func kthDistinct(_ arr: [String], _ k: Int) -> String {
 
 kthDistinct(["d","b","c","b","c","a"], 2)
 
+// MARK: - 1207. Unique Number of Occurrences
 
+func uniqueOccurrences(_ arr: [Int]) -> Bool {
+    var someArr = [Int]()
+    
+    let bla = arr.reduce(into: [:], {$0[$1,default:0] += 1})
+    
+    bla.values.forEach {
+        someArr.append($0)
+    }
+    let someSet = Array(Set(someArr))
+    
+    if someArr.count == someSet.count {
+        return true
+    }
+    return false
+}
+
+uniqueOccurrences([1,2,2,1,1,3])
+
+// MARK: - 1935. Maximum Number of Words You Can Type
+
+func canBeTypedWords(_ text: String, _ brokenLetters: String) -> Int {
+    text
+        .components(separatedBy: " ")
+        .map { s in brokenLetters.first { s.contains($0) } }
+        .filter { $0 == nil }
+        .count
+}
+
+canBeTypedWords("leet code", "e")
 
