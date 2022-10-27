@@ -507,3 +507,11 @@ func canBeTypedWords(_ text: String, _ brokenLetters: String) -> Int {
 
 canBeTypedWords("leet code", "e")
 
+func canBeTypedWords2(_ text: String, _ brokenLetters: String) -> Int {
+        return text.components(separatedBy: " ").filter { Set(Array($0)).intersection(Set(brokenLetters)).count == 0 }.count
+    }
+
+// let
+// e
+//
+

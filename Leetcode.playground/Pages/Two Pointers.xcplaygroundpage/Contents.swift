@@ -7,6 +7,9 @@ import XCTest
 func twoSumII(_ numbers: [Int], _ target: Int) -> [Int] {
     var left = 0, right = numbers.count - 1
     while left < right { // 0
+        
+        //            x     y
+        // numbers = [3,5,7,8] targtet = 12
         if numbers[left] + numbers[right] == target {
             return [left + 1, right + 1]
         } else if numbers[left] + numbers[right] < target {

@@ -105,8 +105,70 @@ class TreeNode {
         return (self.isSameTree(p?.left, q?.left) && self.isSameTree(p?.right, q?.right))
     }
     
+ 
+    // MARK: - 94. Binary Tree Inorder Traversal
+    
+    func inorderTraversal(_ root: TreeNode?) -> [Int] {
+            guard let root = root else { return [] }
+        // 1. We are traversing the left side of the nodes until we reach nil
+        // 2. Once we reached nil, we add the root value to the array
+        // 3. Then we do the same with the right node
+            return inorderTraversal(root.left) + [root.val] + inorderTraversal(root.right)
+        }
+    
+    // MARK: - 572. Subtree of another Tree
+    
+    func isSubtree(_ s: TreeNode?, _ t: TreeNode?) -> Bool {
+        // t denotes the root node of the subtree, s the root node of the tree
+        // if t is nil, it is technically a subtree of s, irrespective of what s is
+            if t == nil { return true }
+        // if we passed the first statement, we deduce that t is not nil. So t is not nil
+        // but s is nil, so t cant be a subtree of s
+            if s == nil { return false }
+        // since we pased the first two statements, we know that both tree roots have a value
+        // we test if the trees are identical, if they are we return true
+            if isIdentical(first: s, second: t) { return true }
+        // if isIdentical returned false, we want to see whether the same tree (the t tree) is found alongside
+        // the left side and the right side of the s tree. If the tree is found on either the left or
+        // the ride side, we return true
+        // think about the fact that all we are doing is just calling isIdentical function on the left and right,
+        // looking whether the tree is found on either side (and testing the base cases).
+            return isSubtree(s?.left, t) ||
+                    isSubtree(s?.right, t)
+        }
+        
+        private func isIdentical(first: TreeNode?, second: TreeNode?) -> Bool {
+            if first == nil, second == nil { return true }
+            if first == nil || second == nil { return false }
+            
+            if first?.val == second?.val,
+                isIdentical(first: first?.left, second: second?.left),
+                isIdentical(first: first?.right, second: second?.right) {
+                return true
+            }
+            return false
+        }
     
     
+    // MARK: - 108. Convert Sorted Array to Binary Search Tree
+
+        func sortedArrayToBST(_ nums: [Int]) -> TreeNode? {
+            helper(nums, 0, nums.count - 1)
+        }
+
+        
+        private func helper(_ nums: [Int], _ lo: Int, _ hi: Int) -> TreeNode? {
+            guard lo <= hi else { return nil }
+
+            let mid = lo + (hi - lo) / 2
+
+            let root = TreeNode(val: nums[mid])
+            root.left = helper(nums, lo, mid - 1)
+            root.right = helper(nums, mid + 1, hi)
+
+            return root
+        }
+
 }
 
 
