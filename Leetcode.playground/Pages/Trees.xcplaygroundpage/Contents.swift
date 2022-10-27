@@ -153,21 +153,47 @@ class TreeNode {
     // MARK: - 108. Convert Sorted Array to Binary Search Tree
 
         func sortedArrayToBST(_ nums: [Int]) -> TreeNode? {
-            helper(nums, 0, nums.count - 1)
+            if nums.count == 0 {
+                return nil
+            }
+            
+            return helper(nums, 0, nums.count - 1)
         }
-
         
-        private func helper(_ nums: [Int], _ lo: Int, _ hi: Int) -> TreeNode? {
-            guard lo <= hi else { return nil }
-
-            let mid = lo + (hi - lo) / 2
-
-            let root = TreeNode(val: nums[mid])
-            root.left = helper(nums, lo, mid - 1)
-            root.right = helper(nums, mid + 1, hi)
-
-            return root
+        func helper(_ nums: [Int], _ low: Int, _ high: Int) -> TreeNode? {
+            // thats the base case
+            if low > high {
+                return nil
+            }
+            // get the middle of the array
+            let middle = (low + high) / 2
+            // create a node with the middle
+            let node = TreeNode(val: nums[middle])
+            // run helper recursively on the left side of the array
+            node.left = helper(nums, low, middle - 1)
+            // run helper recursively on the right side of the array
+            node.right = helper(nums, middle + 1, high)
+            
+            return node
         }
+    
+    
+    // MARK: - 617. Merge two binary trees
+    
+    func mergeTrees(_ t1: TreeNode?, _ t2: TreeNode?) -> TreeNode? {
+        // Our base case: The only time when we want to return nil is when both nodes are nil.
+        // If one node is nil while the other isn't, we just want to add those two up
+        if t1 == nil, t2 == nil { return nil }
+        // We passed first statement, meaning both nodes aren't nil. So now either both have a value and
+        // can be added together, or one of them is nil. If one of them is nil, we substitute it with 0
+        // so we can conduct addition
+        let root = TreeNode(val: (t1?.val ?? 0) + (t2?.val ?? 0))
+        // recursion on left subtree
+        root.left = mergeTrees(t1?.left, t2?.left)
+        // recursion on right subtree
+        root.right = mergeTrees(t1?.right, t2?.right)
+        return root
+    }
 
 }
 
