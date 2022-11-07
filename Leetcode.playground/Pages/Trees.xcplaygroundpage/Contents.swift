@@ -195,7 +195,43 @@ class TreeNode {
         return root
     }
 
+    
+    // MARK: - 112. Path Sum
+    
+    func hasPathSum(_ root: TreeNode?, _ sum: Int) -> Bool {
+        guard let root = root else {
+            return false
+        }
+        
+        if root.left == nil && root.right == nil {
+            return root.val == sum
+        }
+        return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val)
+    }
+    
+    
+    // MARK: - 226. Invert binary tree
+    
+    func invertTree2(_ root: TreeNode?) -> TreeNode? {
+        // base case
+        guard root != nil else { return nil }
+        
+        invertTree2(root?.left)
+        invertTree2(root?.right)
+        // at this point, we are now one level above the base case
+        // Regarding the example 1, we would be at node 2 now
+        // Now, we want to swap the pointers
+        let hold = root?.left
+        root?.left = root?.right
+        root?.right = hold
+        
+        return root
+        
+    }
+    
 }
+
+
 
 
 
