@@ -31,42 +31,41 @@ class TreeNode {
     // MARK: - 104. Maximum Depth of Binary Tree
     
     func maxDepthDFS(_ root: TreeNode?) -> Int {
-        return root != nil ? 1 + max(self.maxDepthDFS(root?.left), self.maxDepthDFS(root?.right)) : 0
-    }
-    // for every level in the tree, we add the nodes in a queue, loop and add 1 to the level
-    func maxDepthBFS(_ root: TreeNode?) -> Int {
-        guard let root = root else { return 0 }
-        var maxLevel = 0
-        var queue = [root] // 3
-        while !queue.isEmpty {
-            maxLevel += 1 // 1, 2, 3
-            let count = queue.count // 1, 2, 2
-            for _ in 0..<count { // 0, 0, 1, 0, 1
-                let curr = queue.removeFirst() // []
-                if let left = curr.left {
-                    queue.append(left) // []
-                }
-                if let right = curr.right {
-                    queue.append(right) // []
-                }
-            }
+        // think about the fact that we will return an integer. This int
+        // will be the longest distance from the root to the furthest leaf node
+        // we are NOT returning booleans or whatever
+        // let's say we are on the third level. So Maximum depth right now is 3
+        // There is no left nor right node, so...
+        guard root != nil else {
+            // ...we return 0 and don't continue the recursion for that node.
+            return 0
         }
-        return maxLevel
+        // think about the fact that every time we reach this line, we are on a new level
+        // since we are on a new (deeper) level, we add 1. Now, if the left node of this
+        // level's node is nil, we exit on line 41 by returning 0. On the other hand
+        // if the left node is not nil, we recursively call this function on the left side again
+        // and add 1 again. Same logic applies to the right side
+        return 1 + max(maxDepthDFS(root?.left), maxDepthDFS(root?.right))
     }
     
     // MARK: - 543. Diameter of Binary Tree
     
-    func heightOfBinaryTree(_ root: TreeNode?) -> Int {
-        guard let node = root else { return 0 }
-        return 1 + max(heightOfBinaryTree(node.left), heightOfBinaryTree(node.right));
-    }
-    
     func diameterOfBinaryTree(_ root: TreeNode?) -> Int {
-        guard let node = root else { return 0 }
-        let hl = heightOfBinaryTree(node.left)
-        let hr = heightOfBinaryTree(node.right)
+       var result = 0
         
-        return max(hl + hr, max(diameterOfBinaryTree(node.left), diameterOfBinaryTree(node.right)))
+        func dfs(root: TreeNode?) -> Int? {
+            guard root != nil else { return -1 }
+            var left = dfs(root: root?.left)
+            var right = dfs(root: root?.right)
+            result = max(result, 2 + (left ?? 0) + (right ?? 0))
+            
+            // witht his line we choose the path (either left or right) which has
+            // the most edges. Remember, our goal is to pick the path between two
+            // nodes that have the most edges between them
+            return 1 + max((left ?? 0), (right ?? 0))
+        }
+        dfs(root: root)
+        return result
     }
     
     // MARK: - 110. Balanced Binary Tree
@@ -231,7 +230,65 @@ class TreeNode {
     
 }
 
+func maxDepthDFS2(_ root: TreeNode?) -> Int {
+    // think about the fact that we will return an integer. This int
+    // will be the longest distance from the root to the furthest leaf node
+    // we are NOT returning booleans or whatever
+    // let's say we are on the third level. So Maximum depth right now is 3
+    // There is no left nor right node, so...
+    guard root != nil else {
+        // ...we return 0 and don't continue the recursion for that node.
+        return 0
+    }
+    // think about the fact that every time we reach this line, we are on a new level
+    // since we are on a new (deeper) level, we add 1. Now, if the left node of this
+    // level's node is nil, we exit on line 41 by returning 0. On the other hand
+    // if the left node is not nil, we recursively call this function on the left side again
+    // and add 1 again. Same logic applies to the right side
+    return 1 + max(maxDepthDFS2(root?.left), maxDepthDFS2(root?.right))
+}
 
+func invertBinaryTree2(_ root: TreeNode?) -> TreeNode? {
+    
+    guard root != nil else { return nil }
+    
+    invertBinaryTree2(root?.left)
+    invertBinaryTree2(root?.right)
+    
+    let temp = root?.right
+    root?.right = root?.left
+    root?.left = temp
+    
+    return root
+}
+
+func inorderTraversal2(_ root: TreeNode?) -> [Int] {
+    var result: [Int] = []
+    
+    func inOrder(_ root: TreeNode?) {
+        guard root != nil else { return }
+        inOrder(root?.left)
+        result.append(root?.val ?? 0)
+        inOrder(root?.right)
+    }
+    inOrder(root)
+    return result
+}
+
+
+func maxDepth2(_ root: TreeNode?) -> Int {
+    guard root != nil else { return 0 }
+    
+    return 1 + max(maxDepth2(root?.left), maxDepth2(root?.right))
+}
+
+func maxDepth3(_ root: TreeNode?) -> Int {
+    guard root != nil else { return 0 }
+    
+    var left = maxDepth3(root?.left)
+    var right = maxDepth3(root?.right)
+    return max(left, right) + 1
+}
 
 
 
